@@ -8,15 +8,15 @@ import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
 const App = () => {
   return (
     <div>
-      <div className=" bg-gray-100 fixed flex w-[100vw] h-auto top-0 border-b-4">
+      <div className="bg-gray-100 sticky z-1000 flex w-[100vw] h-auto top-0 border-b-4">
         <Navbar />
       </div>
-      <RouterProvider router={router}>
-        <div>
+      <div className="m-2">
+        <RouterProvider router={router}>
           {/* Outlet will be filled dynamically i.e. conditional routing*/}
           <Outlet />
-        </div>
-      </RouterProvider>
+        </RouterProvider>
+      </div>
     </div>
   );
 };
