@@ -19,6 +19,7 @@ import {
   ChevronDownIcon,
   PowerIcon,
 } from "@heroicons/react/24/solid";
+import { NotificationsMenu } from "./NotificationsMenu";
 
 const NavbarDark = () => {
   return (
@@ -63,9 +64,7 @@ const NavbarDark = () => {
 
         {/* <IconButton> components with icons for notifications(BellIcon) and ProfileMenu */}
         <div className="ml-auto flex gap-1 md:mr-4">
-          <IconButton variant="text" color="white">
-            <BellIcon className="h-4 w-4" />
-          </IconButton>
+          <NotificationsMenu />
           <ProfileMenu />
         </div>
       </div>
