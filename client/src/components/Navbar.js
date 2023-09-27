@@ -2,7 +2,6 @@ import { useState, createElement } from "react";
 import {
   Navbar,
   Typography,
-  IconButton,
   Button,
   Input,
   Menu,
@@ -12,7 +11,6 @@ import {
   Avatar,
 } from "@material-tailwind/react";
 import {
-  BellIcon,
   Cog6ToothIcon,
   UserCircleIcon,
   LifebuoyIcon,
@@ -26,10 +24,14 @@ const NavbarDark = () => {
     <Navbar
       variant="gradient"
       color="blue-gray"
-      className="sticky h-max max-w-full mx-auto from-blue-gray-900 to-blue-gray-800 px-4 py-3 rounded-t-none"
+      className="sticky z-100 h-max max-w-full mx-auto from-blue-gray-900 to-blue-gray-800 px-4 py-3 rounded-t-none"
     >
       <div className="flex items-center justify-between gap-4 text-white w-full mr-4">
         {/* displays the text "UniVox" and serves as a clickable link. */}
+        {/* <img
+          src="../../public/assets/univox_logo_u.png"
+          className="h-10 w-10 rounded-full"
+        /> */}
         <Typography
           as="a"
           href="/"
@@ -75,7 +77,7 @@ const NavbarDark = () => {
 function SearchIcon() {
   return (
     <svg
-      className="text-gray-600 h-4 w-4 fill-current"
+      className="text-gray-900 h-4 w-4 fill-current"
       xmlns="http://www.w3.org/2000/svg"
       xmlnsXlink="http://www.w3.org/1999/xlink"
       version="1.1"
