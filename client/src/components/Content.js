@@ -1,8 +1,15 @@
-import CardDefault from "./Card";
+import Card from "./Card";
 const Content = () => {
     return (
         <div>
-            <CardDefault />
+            <Card />
+            <Card />
+            <Card />
+            <Card />
+            <Card />
+            <Card />
+            <Card />
+            <Card />
         </div>
     );
 }
