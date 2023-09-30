@@ -46,7 +46,7 @@ export default function DialogCustomAnimation({
           </svg>
         </IconButton>
       </DialogHeader>
-      <DialogBody divider>{content}</DialogBody>
+      <DialogBody divider className="p-5 text-justify max-h-[30rem] overflow-scroll no-scrollbar">{content}</DialogBody>
       <DialogFooter></DialogFooter>
     </Dialog>
   );
