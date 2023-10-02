@@ -5,16 +5,19 @@ import {
   DialogHeader,
   DialogBody,
   DialogFooter,
+  Typography,
 } from "@material-tailwind/react";
 
-export default function DialogCustomAnimation({
+export default function PostDialog({
   open,
   handleOpen,
   title,
   content,
+  AvatarIdentity
 }) {
   return (
     <Dialog
+      size={"xl"}
       open={open}
       handler={handleOpen}
       animate={{
@@ -47,7 +50,9 @@ export default function DialogCustomAnimation({
         </IconButton>
       </DialogHeader>
       <DialogBody divider className="p-5 text-justify max-h-[30rem] overflow-scroll no-scrollbar">{content}</DialogBody>
-      <DialogFooter></DialogFooter>
+      <DialogFooter className="text-left">
+        {AvatarIdentity}
+      </DialogFooter>
     </Dialog>
   );
 }
