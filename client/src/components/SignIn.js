@@ -11,7 +11,8 @@ import {
    
   export default function LoginCard() {
     return (
-      <Card className="w-96">
+      <div className="flex items-center justify-center mt-20">
+        <Card className="w-96">
         <CardHeader
           variant="gradient"
           color="gray"
@@ -46,5 +47,6 @@ import {
           </Typography>
         </CardFooter>
       </Card>
+      </div>
     );
   }

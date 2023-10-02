@@ -1,5 +1,4 @@
 import React from "react";
-import { Chip } from "@material-tailwind/react";
 import {
   QuestionMarkCircleIcon,
 } from "@heroicons/react/24/outline";

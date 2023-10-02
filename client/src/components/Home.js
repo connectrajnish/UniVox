@@ -5,7 +5,7 @@ import Content from "./Content";
 
 const Home = () => {
   return (
-    <div className="flex flex-col md:flex-row">
+    <div className="flex flex-col md:flex-row p-0 m-0">
       {/* Left Sidebar */}
       <div className="md:w-1/5 bg-gray-200 rounded-lg max-h-screen overflow-y-auto no-scrollbar">
         <LeftSidebar />

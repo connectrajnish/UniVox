@@ -8,6 +8,7 @@ import {
    
   export default function SimpleRegistrationForm() {
     return (
+      <div className="flex items-center justify-center mt-20">
       <Card color="transparent" shadow={false}>
         <Typography variant="h4" color="blue-gray">
           Sign Up
@@ -50,5 +51,6 @@ import {
           </Typography>
         </form>
       </Card>
+      </div>
     );
   }

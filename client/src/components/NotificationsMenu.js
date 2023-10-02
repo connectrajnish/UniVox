@@ -76,32 +76,32 @@ export function NotificationsMenu() {
           <div className="flex flex-col gap-1">
             <Typography variant="small" color="gray" className="font-normal">
               <span className="font-medium text-blue-gray-900">Natali</span>{" "}
-              reply to your email
+              commented on your post
             </Typography>
             <Typography
               variant="small"
               className="flex items-center gap-1 text-xs text-gray-600"
             >
-              <ClockIcon />a hour ago
+              <ClockIcon />an hour ago
             </Typography>
           </div>
         </MenuItem>
         <MenuItem className="flex items-center gap-4 py-2 pr-8 pl-2">
           <Avatar
             variant="circular"
-            alt="paypal"
-            src="https://dwglogo.com/wp-content/uploads/2016/08/PayPal_Logo_Icon.png"
+            alt="natali craig"
+            src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=870&q=80"
           />
           <div className="flex flex-col gap-1">
             <Typography variant="small" color="gray" className="font-normal">
-              <span className="font-medium text-blue-gray-900">PayPal</span>{" "}
-              you&apos;ve received a payment.
+              <span className="font-medium text-blue-gray-900">Adya</span>{" "}
+              shared <span>Interview Exp...</span>
             </Typography>
             <Typography
               variant="small"
               className="flex items-center gap-1 text-xs text-gray-600"
             >
-              <ClockIcon />5 hours ago
+              <ClockIcon />an hour ago
             </Typography>
           </div>
         </MenuItem>

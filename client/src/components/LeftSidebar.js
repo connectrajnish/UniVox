@@ -26,7 +26,10 @@ const LeftSidebar = () => {
         <TopicButton linkHref={"#nowhere"} text={"Exam Tips"} />
         <TopicButton linkHref={"#nowhere"} text={"Career Tips"} />
         <TopicButton linkHref={"#nowhere"} text={"Campus Life"} />
-        <TopicButton linkHref={"#nowhere"} text={"Events"} />
+        <TopicButton linkHref={"#nowhere"} text={"Clubs"} />
+        <TopicButton linkHref={"#nowhere"} text={"Sports"} />
+        <TopicButton linkHref={"#nowhere"} text={"Assignment Help"} />
+        <TopicButton linkHref={"#nowhere"} text={"Job Opportunities"} />
         <TopicButton linkHref={"#nowhere"} text={"Interview Experience"} />
       </div>
     </div>
