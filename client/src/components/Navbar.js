@@ -18,7 +18,7 @@ import {
   PowerIcon,
 } from "@heroicons/react/24/solid";
 import { NotificationsMenu } from "./NotificationsMenu";
-
+import { useNavigate } from "react-router-dom";
 const NavbarDark = () => {
   return (
     <Navbar
@@ -120,6 +120,25 @@ function ProfileMenu() {
 
   const closeMenu = () => setIsMenuOpen(false);
 
+  const navigate = useNavigate();
+  const handleMenuItemClick = (label) => {
+    closeMenu();
+
+    if (label === "My Profile") {
+      navigate("/profile");
+    } else if (label === "Edit Profile") {
+      navigate("/edit-profile");
+    } else if (label === "Help") {
+      navigate("/help");
+    } else if (label === "Sign Out") {
+      // Perform sign-out logic
+      // Clear authentication state (replace with your actual logic)
+      // For example, if using a state management library like Redux:
+      // dispatch(logoutAction());
+      navigate("/signin");
+    }
+  };
+
   return (
     <Menu open={isMenuOpen} handler={setIsMenuOpen} placement="bottom-end">
       {/* MenuHandler component is a wrapper around the button that triggers the menu to open or close */}
@@ -152,7 +171,7 @@ function ProfileMenu() {
           return (
             <MenuItem
               key={label}
-              onClick={closeMenu}
+              onClick={() => handleMenuItemClick(label)}
               className={`flex items-center gap-2 rounded ${
                 isLastItem
                   ? "hover:bg-red-500/10 focus:bg-red-500/10 active:bg-red-500/10"

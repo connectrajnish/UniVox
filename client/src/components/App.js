@@ -6,7 +6,7 @@ import SignIn from "./SignIn";
 import SignUp from "./SignUp";
 import ErrorPage from "./ErrorPage";
 
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 
 const App = () => {
   return (
