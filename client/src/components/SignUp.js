@@ -5,11 +5,13 @@ import {
     Button,
     Typography,
   } from "@material-tailwind/react";
-   
+
+  import {Link} from "react-router-dom";
+  
   export default function SimpleRegistrationForm() {
     return (
-      <div className="flex items-center justify-center mt-20">
-      <Card color="transparent" shadow={false}>
+      <div className="flex items-center justify-center mt-10">
+      <Card color="transparent" shadow="lg" className="p-4">
         <Typography variant="h4" color="blue-gray">
           Sign Up
         </Typography>
@@ -45,9 +47,9 @@ import {
           </Button>
           <Typography color="gray" className="mt-4 text-center font-normal">
             Already have an account?{" "}
-            <a href="#" className="font-medium text-gray-900">
+            <Link to="/signin" className="font-medium text-gray-900">
               Sign In
-            </a>
+            </Link>
           </Typography>
         </form>
       </Card>

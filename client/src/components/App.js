@@ -4,6 +4,7 @@ import Home from "./Home";
 import Profile from "./Profile";
 import SignIn from "./SignIn";
 import SignUp from "./SignUp";
+import Discuss from "./Discuss";
 import ErrorPage from "./ErrorPage";
 
 import { Routes, Route } from "react-router-dom";
@@ -20,6 +21,7 @@ const App = () => {
           <Route path="/profile" element={<Profile />} />
           <Route path="/signin" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />
+          <Route path="/discuss" element={<Discuss />} />
           <Route path="*" element={<ErrorPage />} />
         </Routes>
       </div>

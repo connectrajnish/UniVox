@@ -9,17 +9,14 @@ import {
   Textarea,
 } from "@material-tailwind/react";
  
-export function MessageDialog() {
-  const [open, setOpen] = React.useState(false);
- 
-  const handleOpen = () => setOpen(!open);
+export default function HelpDialog({open, handleOpen}) {
+  
  
   return (
     <>
-      <Button onClick={handleOpen}>Message Dialog</Button>
       <Dialog open={open} handler={handleOpen}>
         <div className="flex items-center justify-between">
-          <DialogHeader>New message to @</DialogHeader>
+          <DialogHeader>Ask Help</DialogHeader>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 24 24"
@@ -37,6 +34,7 @@ export function MessageDialog() {
         <DialogBody divider>
           <div className="grid gap-6">
             <Input label="Username" />
+            <Input label="E-mail" />
             <Textarea label="Message" />
           </div>
         </DialogBody>
@@ -45,7 +43,7 @@ export function MessageDialog() {
             close
           </Button>
           <Button variant="gradient" color="green" onClick={handleOpen}>
-            send message
+            send
           </Button>
         </DialogFooter>
       </Dialog>

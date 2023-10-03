@@ -18,7 +18,8 @@ import {
   PowerIcon,
 } from "@heroicons/react/24/solid";
 import { NotificationsMenu } from "./NotificationsMenu";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
+import Help from "./Help";
 const NavbarDark = () => {
   return (
     <Navbar
@@ -32,14 +33,11 @@ const NavbarDark = () => {
           src="../../public/assets/univox_logo_u.png"
           className="h-10 w-10 rounded-full"
         /> */}
-        <Typography
-          as="a"
-          href="/"
-          variant="h6"
-          className="cursor-pointer py-1.5"
-        >
-          UniVox
-        </Typography>
+        <Link to="/">
+          <Typography as="a" variant="h6" className="cursor-pointer py-1.5">
+            UniVox
+          </Typography>
+        </Link>
 
         {/* search input field and field implemented using the <Input> component. */}
         <div className="relative flex-1 ml-auto max-w-[700px]">
@@ -120,6 +118,10 @@ function ProfileMenu() {
 
   const closeMenu = () => setIsMenuOpen(false);
 
+  const [openHelpDialog, setOpenHelpDialog] = useState(false);
+
+  const handleOpenHelpDialog = () => setOpenHelpDialog(!openHelpDialog);
+
   const navigate = useNavigate();
   const handleMenuItemClick = (label) => {
     closeMenu();
@@ -129,7 +131,8 @@ function ProfileMenu() {
     } else if (label === "Edit Profile") {
       navigate("/edit-profile");
     } else if (label === "Help") {
-      navigate("/help");
+      handleOpenHelpDialog();
+      <Help open={openHelpDialog} handleOpen={handleOpenHelpDialog} />;
     } else if (label === "Sign Out") {
       // Perform sign-out logic
       // Clear authentication state (replace with your actual logic)

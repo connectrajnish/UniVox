@@ -1,18 +1,19 @@
 import { Button } from "@material-tailwind/react";
 import { PlusIcon } from "@heroicons/react/24/outline";
+import {Link} from "react-router-dom";
 
 const LeftSidebar = () => {
   return (
     <div className="flex flex-col mt-3">
       <div className="mx-1 mt-5">
-        <a href="#buttons-with-link">
+        <Link to="/discuss">
           <Button
             fullWidth
             className="flex flex-wrap items-center justify-center bg-black hover:bg-gray-900"
           >
             <PlusIcon className="h-5 w-5 mr-1" /> Discuss
           </Button>
-        </a>
+        </Link>
       </div>
       <div>
         <hr className="my-5 mx-2 border-gray-700" />
