@@ -1,16 +1,16 @@
 import {
-    Card,
-    Input,
-    Checkbox,
-    Button,
-    Typography,
-  } from "@material-tailwind/react";
+  Card,
+  Input,
+  Checkbox,
+  Button,
+  Typography,
+} from "@material-tailwind/react";
 
-  import {Link} from "react-router-dom";
-  
-  export default function SimpleRegistrationForm() {
-    return (
-      <div className="flex items-center justify-center mt-10">
+import { Link } from "react-router-dom";
+
+export default function SimpleRegistrationForm() {
+  return (
+    <div className="flex items-center justify-center mt-10">
       <Card color="transparent" shadow="lg" className="p-4">
         <Typography variant="h4" color="blue-gray">
           Sign Up
@@ -42,9 +42,11 @@ import {
             }
             containerProps={{ className: "-ml-2.5" }}
           />
-          <Button className="mt-6" fullWidth>
-            Register
-          </Button>
+          <Link to="/signin">
+            <Button className="mt-6" fullWidth>
+              Register
+            </Button>
+          </Link>
           <Typography color="gray" className="mt-4 text-center font-normal">
             Already have an account?{" "}
             <Link to="/signin" className="font-medium text-gray-900">
@@ -53,6 +55,6 @@ import {
           </Typography>
         </form>
       </Card>
-      </div>
-    );
-  }
+    </div>
+  );
+}

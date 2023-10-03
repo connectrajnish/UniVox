@@ -7,10 +7,18 @@ import {
   Input,
   Checkbox,
   Button,
+  navbar,
 } from "@material-tailwind/react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
-export default function LoginCard() {
+export default function LoginCard({ signInOrNot, handleSignInOrNot }) {
+  const navigate = useNavigate();
+  const handler = () => {
+    if(signInOrNot==false){
+      handleSignInOrNot();
+      navigate("/");
+    }
+  };
   return (
     <div className="flex items-center justify-center mt-20">
       <Card className="w-96">
@@ -31,7 +39,7 @@ export default function LoginCard() {
           </div>
         </CardBody>
         <CardFooter className="pt-0">
-          <Button variant="gradient" fullWidth>
+          <Button variant="gradient" fullWidth onClick={handler}>
             Sign In
           </Button>
           <Typography variant="small" className="mt-6 flex justify-center">

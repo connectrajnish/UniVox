@@ -20,7 +20,7 @@ import {
 import { NotificationsMenu } from "./NotificationsMenu";
 import { useNavigate, Link } from "react-router-dom";
 import Help from "./Help";
-const NavbarDark = () => {
+const NavbarDark = ({ signInOrNot, handleSignInOrNot }) => {
   return (
     <Navbar
       variant="gradient"
@@ -62,11 +62,28 @@ const NavbarDark = () => {
           </Button>
         </div>
 
-        {/* <IconButton> components with icons for notifications(BellIcon) and ProfileMenu */}
-        <div className="ml-auto flex gap-1 md:mr-4">
-          <NotificationsMenu />
-          <ProfileMenu />
-        </div>
+        {signInOrNot ? (
+          <div className="ml-auto flex gap-1 md:mr-4">
+            <NotificationsMenu />
+            <ProfileMenu
+              signInOrNot={signInOrNot}
+              handleSignInOrNot={handleSignInOrNot}
+            />
+          </div>
+        ) : (
+          <div className="ml-auto flex gap-1 md:mr-4">
+            <Link to="/signin">
+              <Button size="sm" color="white">
+                Sign In
+              </Button>
+            </Link>
+            <Link to="/signup">
+              <Button size="sm" color="white">
+                Sign Up
+              </Button>
+            </Link>
+          </div>
+        )}
       </div>
     </Navbar>
   );
@@ -113,7 +130,7 @@ const profileMenuItems = [
   },
 ];
 
-function ProfileMenu() {
+function ProfileMenu({ signInOrNot, handleSignInOrNot }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const closeMenu = () => setIsMenuOpen(false);
@@ -138,6 +155,11 @@ function ProfileMenu() {
       // Clear authentication state (replace with your actual logic)
       // For example, if using a state management library like Redux:
       // dispatch(logoutAction());
+      {
+        if (signInOrNot) {
+          handleSignInOrNot();
+        }
+      }
       navigate("/signin");
     }
   };
