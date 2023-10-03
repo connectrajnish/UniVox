@@ -6,9 +6,7 @@ import SignIn from "./SignIn";
 import SignUp from "./SignUp";
 import ErrorPage from "./ErrorPage";
 
-import { createBrowserRouter, RouterProvider, Outlet } from "react-router-dom";
-
-
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 const App = () => {
   return (
@@ -17,31 +15,16 @@ const App = () => {
         <Navbar />
       </div>
       <div className="m-2">
-        <RouterProvider router={router}>
-          {/* Outlet will be filled dynamically i.e. conditional routing*/}
-          <Outlet />
-        </RouterProvider>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/signin" element={<SignIn />} />
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="*" element={<ErrorPage />} />
+        </Routes>
       </div>
     </div>
   );
 };
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <Home />,
-    errorElement: <ErrorPage/>,
-  },
-  {
-    path: "profile",
-    element: <Profile />,
-  },
-  {
-    path: "signin",
-    element: <SignIn />,
-  },
-  {
-    path: "signup",
-    element: <SignUp />,
-  }
-]);
+
 export default App;
