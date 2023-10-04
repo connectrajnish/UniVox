@@ -2,7 +2,6 @@ import { useState, createElement } from "react";
 import {
   Navbar,
   Typography,
-  IconButton,
   Button,
   Input,
   Menu,
@@ -12,31 +11,33 @@ import {
   Avatar,
 } from "@material-tailwind/react";
 import {
-  BellIcon,
   Cog6ToothIcon,
   UserCircleIcon,
   LifebuoyIcon,
   ChevronDownIcon,
   PowerIcon,
 } from "@heroicons/react/24/solid";
-
-const NavbarDark = () => {
+import { NotificationsMenu } from "./NotificationsMenu";
+import { useNavigate, Link } from "react-router-dom";
+import Help from "./Help";
+const NavbarDark = ({ signInOrNot, handleSignInOrNot }) => {
   return (
     <Navbar
       variant="gradient"
       color="blue-gray"
-      className="sticky h-max max-w-full mx-auto from-blue-gray-900 to-blue-gray-800 px-4 py-3 rounded-t-none"
+      className="sticky z-100 h-max max-w-full mx-auto from-blue-gray-900 to-blue-gray-800 px-4 py-3 rounded-t-none"
     >
       <div className="flex items-center justify-between gap-4 text-white w-full mr-4">
         {/* displays the text "UniVox" and serves as a clickable link. */}
-        <Typography
-          as="a"
-          href="/"
-          variant="h6"
-          className="cursor-pointer py-1.5"
-        >
-          UniVox
-        </Typography>
+        {/* <img
+          src="../../public/assets/univox_logo_u.png"
+          className="h-10 w-10 rounded-full"
+        /> */}
+        <Link to="/">
+          <Typography as="a" variant="h6" className="cursor-pointer py-1.5">
+            UniVox
+          </Typography>
+        </Link>
 
         {/* search input field and field implemented using the <Input> component. */}
         <div className="relative flex-1 ml-auto max-w-[700px]">
@@ -61,13 +62,28 @@ const NavbarDark = () => {
           </Button>
         </div>
 
-        {/* <IconButton> components with icons for notifications(BellIcon) and ProfileMenu */}
-        <div className="ml-auto flex gap-1 md:mr-4">
-          <IconButton variant="text" color="white">
-            <BellIcon className="h-4 w-4" />
-          </IconButton>
-          <ProfileMenu />
-        </div>
+        {signInOrNot ? (
+          <div className="ml-auto flex gap-1 md:mr-4">
+            <NotificationsMenu />
+            <ProfileMenu
+              signInOrNot={signInOrNot}
+              handleSignInOrNot={handleSignInOrNot}
+            />
+          </div>
+        ) : (
+          <div className="ml-auto flex gap-1 md:mr-4">
+            <Link to="/signin">
+              <Button size="sm" color="white">
+                Sign In
+              </Button>
+            </Link>
+            <Link to="/signup">
+              <Button size="sm" color="white">
+                Sign Up
+              </Button>
+            </Link>
+          </div>
+        )}
       </div>
     </Navbar>
   );
@@ -76,7 +92,7 @@ const NavbarDark = () => {
 function SearchIcon() {
   return (
     <svg
-      className="text-gray-600 h-4 w-4 fill-current"
+      className="text-gray-900 h-4 w-4 fill-current"
       xmlns="http://www.w3.org/2000/svg"
       xmlnsXlink="http://www.w3.org/1999/xlink"
       version="1.1"
@@ -114,10 +130,39 @@ const profileMenuItems = [
   },
 ];
 
-function ProfileMenu() {
+function ProfileMenu({ signInOrNot, handleSignInOrNot }) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const closeMenu = () => setIsMenuOpen(false);
+
+  const [openHelpDialog, setOpenHelpDialog] = useState(false);
+
+  const handleOpenHelpDialog = () => setOpenHelpDialog(!openHelpDialog);
+
+  const navigate = useNavigate();
+  const handleMenuItemClick = (label) => {
+    closeMenu();
+
+    if (label === "My Profile") {
+      navigate("/profile");
+    } else if (label === "Edit Profile") {
+      navigate("/edit-profile");
+    } else if (label === "Help") {
+      handleOpenHelpDialog();
+      <Help open={openHelpDialog} handleOpen={handleOpenHelpDialog} />;
+    } else if (label === "Sign Out") {
+      // Perform sign-out logic
+      // Clear authentication state (replace with your actual logic)
+      // For example, if using a state management library like Redux:
+      // dispatch(logoutAction());
+      {
+        if (signInOrNot) {
+          handleSignInOrNot();
+        }
+      }
+      navigate("/signin");
+    }
+  };
 
   return (
     <Menu open={isMenuOpen} handler={setIsMenuOpen} placement="bottom-end">
@@ -131,9 +176,9 @@ function ProfileMenu() {
           <Avatar
             variant="circular"
             size="sm"
-            alt="tania andrew"
-            className="border border-white p-0.5"
-            src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1480&q=80"
+            alt="Catherine"
+            className="border border-white p-0.5 object-cover"
+            src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=988&q=80"
           />
           <ChevronDownIcon
             strokeWidth={2.5}
@@ -151,7 +196,7 @@ function ProfileMenu() {
           return (
             <MenuItem
               key={label}
-              onClick={closeMenu}
+              onClick={() => handleMenuItemClick(label)}
               className={`flex items-center gap-2 rounded ${
                 isLastItem
                   ? "hover:bg-red-500/10 focus:bg-red-500/10 active:bg-red-500/10"

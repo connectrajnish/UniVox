@@ -1,12 +1,32 @@
-import React from "react";
+import React, { useState } from "react";
 import Navbar from "./Navbar";
+import Home from "./Home";
+import Profile from "./Profile";
+import SignIn from "./SignIn";
+import SignUp from "./SignUp";
+import Discuss from "./Discuss";
+import ErrorPage from "./ErrorPage";
+
+import { Routes, Route } from "react-router-dom";
 
 const App = () => {
+  const [signInOrNot, setSignInOrNot] = useState(false);
+  const handleSignInOrNot = () => setSignInOrNot(!signInOrNot);
   return (
-    <div>
-      <div className=" bg-gray-100 fixed flex w-[100vw] h-auto top-0 border-b-4">
-              <Navbar />
-            </div> 
+    <div className="w-full flex flex-col">
+      <div className="bg-gray-100 sticky z-1000 w-full flex h-auto top-0 border-b-4 rounded-b-xl">
+        <Navbar signInOrNot={signInOrNot} handleSignInOrNot={handleSignInOrNot}/>
+      </div>
+      <div className="m-2">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/signin" element={<SignIn signInOrNot={signInOrNot} handleSignInOrNot={handleSignInOrNot}/>} />
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/discuss" element={<Discuss />} />
+          <Route path="*" element={<ErrorPage />} />
+        </Routes>
+      </div>
     </div>
   );
 };
