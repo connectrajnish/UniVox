@@ -61,7 +61,7 @@ module.exports.upvotePost = async (req, res) => {
   }
 };
 
-module.exports.readPost = async (req, res) => {
+module.exports.getAPost = async (req, res) => {
   try {
     // Get the post ID from the request parameters
     const postId = req.params.id;
@@ -79,5 +79,19 @@ module.exports.readPost = async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Failed to retrieve the post." });
+  }
+};
+
+// Controller function to get all posts
+module.exports.getAllPosts = async (req, res) => {
+  try {
+    // Fetch all posts from the database
+    const posts = await Post.find();
+
+    // Respond with the array of post data
+    res.status(200).json(posts);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Failed to retrieve posts.' });
   }
 };
