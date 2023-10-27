@@ -42,10 +42,11 @@ module.exports.signUp = async (req, res) => {
     
 
     const payload = {
-      user: { id: user.id },
+      id: user.id,
     };
+    
 
-    jwt.sign(payload, Jwt_secret, { expiresIn: 10000 }, (err, token) => {
+    jwt.sign(payload, Jwt_secret, { expiresIn: '24h' }, (err, token) => {
       if (err) return res.status(500).json({ error: err });;
       res.json({ message: "Registered successfully", token});
     });
@@ -87,10 +88,11 @@ module.exports.signIn = async (req, res) => {
   
       // Create a JWT
       const payload = {
-        user: { id: user.id },
+        id: user.id,
       };
+      
   
-      jwt.sign(payload, Jwt_secret, { expiresIn: "1h" }, (err, token) => {
+      jwt.sign(payload, Jwt_secret, { expiresIn: "24h" }, (err, token) => {
         if (err) return res.status(500).json({ error: err });;
         res.json({ token});
       });

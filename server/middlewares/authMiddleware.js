@@ -2,7 +2,7 @@ const jwt = require("jsonwebtoken");
 const mongoose = require("mongoose");
 const User = require("../models/userProfile"); // Use your actual User model name
 
-module.exports.authMiddleware = async (req, res, next) => {
+module.exports = async (req, res, next) => {
   const { authorization } = req.headers;
 
   if (!authorization) {
@@ -10,11 +10,11 @@ module.exports.authMiddleware = async (req, res, next) => {
   }
 
   const token = authorization.replace("Bearer ", "");
-
+  
   try {
     const payload = jwt.verify(token, process.env.JWT_SECRET); // Use environment variable for the secret
-
-    const user = await User.findById(payload._id);
+    
+    const user = await User.findById(payload.id);
 
     if (!user) {
       return res.status(401).json({ error: "User not found" });
@@ -26,7 +26,7 @@ module.exports.authMiddleware = async (req, res, next) => {
     if (error.name === "JsonWebTokenError") {
       return res.status(401).json({ error: "Invalid token" });
     } else {
-      return res.status(500).json({ error: "Server error" });
+      return res.status(500).json({ error: error });
     }
   }
 };

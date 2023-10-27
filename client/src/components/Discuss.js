@@ -10,6 +10,7 @@ const API_URL = process.env.API_URL;
 
 export default function TextareaWithRichTextEditor() {
   const [editor, setEditor] = useState(null);
+  const [heading, setHeading] = useState(""); // Add state for heading
 
   useEffect(() => {
     if (!quillInitialized && editor == null) {
@@ -37,20 +38,21 @@ export default function TextareaWithRichTextEditor() {
   const handleSave = () => {
     const richText = editor.root.innerHTML;
   
-    // Create a JSON object with the rich text content
-    const data = { richText };
+    // Create a JSON object with both the heading and the rich text content
+    const data = { heading, richText };
   
     // Send a POST request using Axios
-    axios.post(`${API_URL}/discuss`, data)
+    axios.post(`${API_URL}/post`, data)
     .then((response) => {
         // Handle successful response (e.g., show a success message)
-        console.log('Rich text content stored successfully.');
+        console.log('Rich text content and heading stored successfully.');
         editor.root.innerHTML = '';
+        setHeading(""); // Clear the heading input
         navigate(`${API_URL}/posts/${response.data.postId}`);
       })
       .catch((error) => {
         // Handle errors (e.g., show an error message)
-        console.error('Failed to store rich text content:', error);
+        console.error('Failed to store rich text content and heading:', error);
       });
   };
 
@@ -58,7 +60,7 @@ export default function TextareaWithRichTextEditor() {
     <div className="flex flex-col items-center mt-10">
       <div className="w-3/4">
         <div className="mb-4">
-          <Input size="lg" label="Heading" />
+          <Input size="lg" label="Heading" value={heading} onChange={(e) => setHeading(e.target.value)} />
         </div>
         <div
           id="quill-container"

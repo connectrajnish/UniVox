@@ -1,4 +1,6 @@
+const post_controller = require('../controllers/post_controller');
 const express = require('express');
 const router = express.Router();
-
-// router.get
+const authMiddleware = require('../middlewares/authMiddleware');
+router.post('/create-post', authMiddleware, post_controller.createPost);
+module.exports = router;
