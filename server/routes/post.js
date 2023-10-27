@@ -5,6 +5,7 @@ const authMiddleware = require('../middlewares/authMiddleware');
 
 router.post('/create-post', authMiddleware, post_controller.createPost);
 router.post('/upvote/:id', authMiddleware, post_controller.upvotePost);
+router.get('/:id', post_controller.readPost);
 
 
 module.exports = router;
