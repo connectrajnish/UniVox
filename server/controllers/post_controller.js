@@ -17,6 +17,11 @@ module.exports.createPost = async (req, res) => {
     // Save the post to the database
     const savedPost = await post.save();
 
+    // Add the post ID to the user's posts array
+    const user = await User.findById(userId);
+    user.posts.push(savedPost._id);
+    await user.save();
+
     // Respond with the saved post data
     res.status(201).json({ postId: savedPost._id });
   } catch (error) {
@@ -93,5 +98,43 @@ module.exports.getAllPosts = async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Failed to retrieve posts.' });
+  }
+};
+
+// Controller function to delete a post
+module.exports.deletePost = async (req, res) => {
+  try {
+    const postId = req.params.id; // Get the post ID from the request parameters
+    const userId = req.user._id; // Get the ID of the user making the request
+
+    // Find the post by ID
+    const post = await Post.findById(postId);
+
+    if (!post) {
+      return res.status(404).json({ error: 'Post not found' });
+    }
+
+    // Check if the user making the request is the creator of the post
+    if (post.user.toString() !== userId) {
+      return res.status(403).json({ error: 'You are not authorized to delete this post' });
+    }
+
+    // Remove the post ID from the user's posts array
+    const user = await User.findById(userId);
+    const postIndex = user.posts.indexOf(postId);
+
+    if (postIndex !== -1) {
+      user.posts.splice(postIndex, 1);
+      await user.save();
+    }
+
+    // Remove the post from the database
+    await post.deleteOne();
+
+    // Respond with a success message
+    res.status(200).json({ message: 'Post deleted successfully' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Failed to delete the post' });
   }
 };
