@@ -12,7 +12,11 @@ connectDB();
 app.use(cors({ origin: true, credentials: true }));
 app.use(express.json({ extended: false }));
 
-app.get('/', (req, res) => res.send("Server up and running"));
+const bodyParser = require('body-parser');
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
+app.use('/',require('./routes/index_router'));
 
 app.listen(PORT, (err) => {
     if (err) {
