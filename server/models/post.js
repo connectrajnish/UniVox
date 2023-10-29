@@ -21,6 +21,10 @@ const postSchema = new Schema({
       type: Schema.Types.ObjectId,
       ref: 'UserProfile' // Reference to User Profile model for users who upvoted
     }],
+    category: {
+      type: Schema.Types.ObjectId,
+      ref: 'Category',
+    },
   },
   {
     timestamps: true,

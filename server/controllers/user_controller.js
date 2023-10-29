@@ -93,12 +93,30 @@ module.exports.signIn = async (req, res) => {
       
   
       jwt.sign(payload, Jwt_secret, { expiresIn: "24h" }, (err, token) => {
-        if (err) return res.status(500).json({ error: err });;
+        if (err) return res.status(500).json({ error: err });
         res.json({ token});
       });
     } catch (err) {
       console.error(err.message);
       res.status(500).send("Server Error");
+    }
+  };
+
+  module.exports.signOut = async (req, res) => {
+    try {
+      // Get the token from the request headers or cookies
+      const token = req.headers.authorization;
+      console.log(token)
+  
+      if (!token) {
+        return res.status(401).json({ msg: 'No token provided' });
+      }
+  
+      // Respond with a success message
+      res.status(200).json({ msg: 'Successfully signed out' });
+    } catch (err) {
+      console.error(err.message);
+      res.status(500).send('Server Error');
     }
   };
 

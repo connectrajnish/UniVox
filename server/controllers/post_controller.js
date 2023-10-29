@@ -1,21 +1,36 @@
 // createPost, readPost(all and single), upvote, delete
 const Post = require("../models/post");
 const User = require("../models/userProfile");
-
+const Category = require('../models/postCategory');
 module.exports.createPost = async (req, res) => {
   try {
-    const { heading, richText } = req.body;
+    const { heading, richText, } = req.body;
+    const category = req.body.category.toLowerCase(); // Convert to lowercase
     const userId = req.user._id;
+
+    // Check if the category already exists
+    let categoryObject = await Category.findOne({ name: category });
+
+    // If the category doesn't exist, create a new one
+    if (!categoryObject) {
+      categoryObject = new Category({ name: category, posts: [] });
+      await categoryObject.save();
+    }
 
     // Create a new post document
     const post = new Post({
       heading: heading,
       content: richText, // Rename richText to content
       user: userId, // Use the user ID from the request
+      category: categoryObject._id,
     });
 
     // Save the post to the database
     const savedPost = await post.save();
+
+    // Add the post ID to the category
+    categoryObject.posts.push(savedPost._id);
+    await categoryObject.save();
 
     // Add the post ID to the user's posts array
     const user = await User.findById(userId);
@@ -27,6 +42,28 @@ module.exports.createPost = async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Failed to save the post." });
+  }
+};
+
+// Fetch posts of a specific category
+module.exports.getPostsByCategory = async (req, res) => {
+  try {
+    const categoryName = req.params.categoryName.toLowerCase(); // Get the category name from the request parameters
+
+    // Find the category by name
+    const category = await Category.findOne({ name: categoryName }).populate('posts');
+
+    if (!category) {
+      return res.status(404).json({ error: 'Category not found' });
+    }
+
+    // Get the posts associated with the category
+    const posts = category.posts;
+
+    res.status(200).json({ posts });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Failed to fetch posts by category' });
   }
 };
 
@@ -72,7 +109,7 @@ module.exports.getAPost = async (req, res) => {
     const postId = req.params.id;
 
     // Find the post by ID
-    const post = await Post.findById(postId);
+    const post = await Post.findById(postId).populate('category', 'name');
 
     if (!post) {
       // If the post is not found, return a 404 response
@@ -91,7 +128,7 @@ module.exports.getAPost = async (req, res) => {
 module.exports.getAllPosts = async (req, res) => {
   try {
     // Fetch all posts from the database
-    const posts = await Post.find();
+    const posts = await Post.find().populate('category', 'name');
 
     // Respond with the array of post data
     res.status(200).json(posts);
@@ -126,6 +163,15 @@ module.exports.deletePost = async (req, res) => {
     if (postIndex !== -1) {
       user.posts.splice(postIndex, 1);
       await user.save();
+    }
+    
+    // Remove the post from the category
+    const category = await Category.findById(post.category);
+    const postIndexInCategory = category.posts.indexOf(postId);
+
+    if (postIndexInCategory !== -1) {
+      category.posts.splice(postIndexInCategory, 1);
+      await category.save();
     }
 
     // Remove the post from the database

@@ -8,6 +8,6 @@ router.post('/upvote/:id', authMiddleware, post_controller.upvotePost);
 router.get('/:id', post_controller.getAPost);
 router.get('/', post_controller.getAllPosts);
 router.delete('/:id', authMiddleware, post_controller.deletePost);
-
+router.get('/categories/:categoryName', post_controller.getPostsByCategory);
 
 module.exports = router;
