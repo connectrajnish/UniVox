@@ -4,6 +4,7 @@ import "quill/dist/quill.snow.css"; // Import Quill's CSS
 import Quill from "quill";
 import axios from 'axios';
 import { useNavigate } from "react-router-dom";
+import MenuWithCheckbox from "./MenuWithCheckbox";
 
 let quillInitialized = false;
 const API_URL = process.env.API_URL;
@@ -62,9 +63,12 @@ export default function TextareaWithRichTextEditor() {
         <div className="mb-4">
           <Input size="lg" label="Heading" value={heading} onChange={(e) => setHeading(e.target.value)} />
         </div>
+        <div className="mb-4">
+          <MenuWithCheckbox />
+        </div>
         <div
           id="quill-container"
-          style={{ minHeight: "100px", maxHeight: "300px", overflowY: "auto" }}
+          className="rounded-b-lg min-h-[100px] max-h-[300px] overflow-y-auto"
         ></div>
       </div>
       <div className="flex gap-2 mt-2">

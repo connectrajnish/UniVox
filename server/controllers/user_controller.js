@@ -130,9 +130,9 @@ module.exports.getUserProfile = async (req, res) => {
   try {
     // Retrieve the user's profile based on the user ID provided in the request params
     const userName = req.params.username;
-    const userProfile = await User.findOne({ userName: userName }).select(
-      "-password"
-    );
+    const userProfile = await User.findOne({ userName: userName })
+      .select("-password")
+      .populate("posts");
 
     if (!userProfile) {
       return res.status(404).json({ error: "User not found" });
