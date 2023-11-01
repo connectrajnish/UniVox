@@ -6,24 +6,115 @@ import {
   Typography,
 } from "@material-tailwind/react";
 
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+
+const API_URL = process.env.API_URL;
 
 export default function SimpleRegistrationForm() {
+  const [formData, setFormData] = useState({
+    name: "",
+    userName: "",
+    email: "",
+    password: "",
+    agreedToTerms: false,
+  });
+
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    const inputValue = type === "checkbox" ? checked : value;
+
+    setFormData({
+      ...formData,
+      [name]: inputValue,
+    });
+  };
+  const navigate = useNavigate();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    // Send form data to the backend using Axios
+    try {
+      
+      const response = await axios.post(`${API_URL}/user/sign-up`, formData);
+
+      // Handle the response, e.g., show success message or redirect
+      // console.log("Registration successful!", response.data);
+      navigate("/signin");
+    } catch (error) {
+      if (error.response) {
+        const { status, data } = error.response;
+        if (
+          status === 400 &&
+          data.msg === "User already exists with that email or userName"
+        ) {
+          // Handle the case where the user already exists
+          // You can display an error message or take any other appropriate action
+          alert("User already exists with that email or userName");
+          // Example: Show an error message
+          // setErrorMsg("A user with the same email or username already exists.");
+        } else {
+          // Handle other errors, e.g., server errors
+          alert("Registration failed")
+          console.error("Registration failed:", error);
+        }
+      } else {
+        // Handle network errors
+        alert("Network error");
+        console.error("Network error:", error);
+      }
+    }
+  };
+
   return (
     <div className="flex items-center justify-center">
-      <Card color="transparent" shadow="lg" className="p-4">
+      <Card color="transparent" shadow={true} className="p-3">
         <Typography variant="h4" color="blue-gray">
           Sign Up
         </Typography>
         <Typography color="gray" className="mt-1 font-normal">
           Enter your details to register.
         </Typography>
-        <form className="mt-8 mb-2 w-80 max-w-screen-lg sm:w-96">
+        <form
+          onSubmit={handleSubmit}
+          className="mt-8 mb-2 w-80 max-w-screen-lg sm:w-96"
+        >
           <div className="mb-4 flex flex-col gap-6">
-            <Input size="lg" label="Name" />
-            <Input size="lg" label="Username" />
-            <Input size="lg" label="Email" />
-            <Input type="password" size="lg" label="Password" />
+            <Input
+              required
+              size="lg"
+              label="Name"
+              name="name"
+              value={formData.name}
+              onChange={handleChange}
+            />
+            <Input
+              required
+              size="lg"
+              label="UserName"
+              name="userName"
+              value={formData.userName}
+              onChange={handleChange}
+            />
+            <Input
+              required
+              type="email"
+              size="lg"
+              label="Email"
+              name="email"
+              value={formData.email}
+              onChange={handleChange}
+            />
+            <Input
+              required
+              type="password"
+              size="lg"
+              label="Password"
+              name="password"
+              value={formData.password}
+              onChange={handleChange}
+            />
             <Typography
               variant="small"
               color="gray"
@@ -45,6 +136,7 @@ export default function SimpleRegistrationForm() {
             </Typography>
           </div>
           <Checkbox
+            required
             label={
               <Typography
                 variant="small"
@@ -52,21 +144,22 @@ export default function SimpleRegistrationForm() {
                 className="flex items-center font-normal"
               >
                 I agree the
-                <a
-                  href="#"
+                <Link
+                  to="#"
                   className="font-medium transition-colors hover:text-gray-900"
                 >
                   &nbsp;Terms and Conditions
-                </a>
+                </Link>
               </Typography>
             }
+            name="agreedToTerms"
+            checked={formData.agreedToTerms}
+            onChange={handleChange}
             containerProps={{ className: "-ml-2.5" }}
           />
-          <Link to="/signin">
-            <Button className="mt-6" fullWidth>
-              Register
-            </Button>
-          </Link>
+          <Button type="submit" className="mt-6" fullWidth>
+            Register
+          </Button>
           <Typography color="gray" className="mt-4 text-center font-normal">
             Already have an account?{" "}
             <Link to="/signin" className="font-medium text-gray-900">

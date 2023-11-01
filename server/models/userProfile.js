@@ -22,6 +22,10 @@ const userProfileSchema = new Schema(
       required: true,
       unique: true,
     },
+    agreedToTerms: {
+      type: Boolean,
+      required: true
+    },
     about: {
       type: String,
     },

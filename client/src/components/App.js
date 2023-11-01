@@ -23,7 +23,7 @@ const App = () => {
           <Route path="/profile" element={<Profile />} />
           <Route path="/signin" element={<SignIn signInOrNot={signInOrNot} handleSignInOrNot={handleSignInOrNot}/>} />
           <Route path="/signup" element={<SignUp />} />
-          <Route path="/discuss" element={<Discuss />} />
+          <Route path="/post" element={<Discuss />} />
           <Route path="*" element={<ErrorPage />} />
         </Routes>
       </div>

@@ -9,7 +9,10 @@ const User = require("../models/userProfile"); // Your user model
 const validateSignUp = [
   check("name", "Name is required").not().isEmpty(),
   check("userName", "Username is required").not().isEmpty(),
-  check("userName", "Username must contain only alphanumeric characters").isAlphanumeric(),
+  check(
+    "userName",
+    "Username must contain only alphanumeric characters"
+  ).isAlphanumeric(),
   check("email", "Please include a valid email").isEmail(),
   check(
     "password",
@@ -29,9 +32,9 @@ module.exports.signUp = async (req, res) => {
   //   return res.status(400).json({ msg: "You are already logged in" });
   // }
 
-  let { name, email, password, userName } = req.body;
+  let { name, email, password, userName, agreedToTerms } = req.body;
   userName = userName.toLowerCase();
-  
+
   try {
     let user = await User.findOne({
       $or: [{ email: email }, { userName: userName }],
@@ -42,19 +45,12 @@ module.exports.signUp = async (req, res) => {
         .json({ msg: "User already exists with that email or userName" });
     }
 
-    user = new User({ name, email, userName, password });
+    user = new User({ name, email, userName, password, agreedToTerms });
     const salt = await bcrypt.genSalt(12);
     user.password = await bcrypt.hash(password, salt);
     await user.save();
 
-    const payload = {
-      id: user.id,
-    };
-
-    jwt.sign(payload, Jwt_secret, { expiresIn: "24h" }, (err, token) => {
-      if (err) return res.status(500).json({ error: err });
-      res.json({ message: "Registered successfully", token });
-    });
+    res.status(200).json({ message: "Registered successfully" });
   } catch (err) {
     console.error(err.message);
     res.status(500).send({ error: err.message });

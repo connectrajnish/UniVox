@@ -6,7 +6,7 @@ const LeftSidebar = () => {
   return (
     <div className="flex flex-col mt-3">
       <div className="mx-1 mt-5">
-        <Link to="/discuss">
+        <Link to="/post">
           <Button
             fullWidth
             className="flex flex-wrap items-center justify-center bg-black hover:bg-gray-900"
