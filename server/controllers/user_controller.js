@@ -9,6 +9,7 @@ const User = require("../models/userProfile"); // Your user model
 const validateSignUp = [
   check("name", "Name is required").not().isEmpty(),
   check("userName", "Username is required").not().isEmpty(),
+  check("userName", "Username must contain only alphanumeric characters").isAlphanumeric(),
   check("email", "Please include a valid email").isEmail(),
   check(
     "password",
@@ -28,8 +29,9 @@ module.exports.signUp = async (req, res) => {
   //   return res.status(400).json({ msg: "You are already logged in" });
   // }
 
-  const { name, email, password, userName } = req.body;
-
+  let { name, email, password, userName } = req.body;
+  userName = userName.toLowerCase();
+  
   try {
     let user = await User.findOne({
       $or: [{ email: email }, { userName: userName }],
