@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   Card,
   CardHeader,
@@ -7,18 +8,49 @@ import {
   Input,
   Checkbox,
   Button,
-  navbar,
 } from "@material-tailwind/react";
 import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+const API_URL = process.env.API_URL;
 
-export default function LoginCard({ signInOrNot, handleSignInOrNot }) {
+export default function LoginCard() {
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+
+  const [rememberMe, setRememberMe] = useState(false);
+
+  const handleCheckboxChange = () => {
+    setRememberMe(!rememberMe);
+  };
+
   const navigate = useNavigate();
-  const handler = () => {
-    if(signInOrNot==false){
-      handleSignInOrNot();
-      navigate("/");
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const response = await axios.post(`${API_URL}/user/sign-in`, formData);
+
+      if (response.status === 200) {
+        navigate("/");
+      } else if (response.status === 400) {
+        alert("Invalid credentials");
+      }
+    } catch (error) {
+      alert("An error occurred");
+      console.error("An error occurred:", error);
     }
   };
+
   return (
     <div className="flex items-center justify-center mt-20">
       <Card className="w-96">
@@ -31,17 +63,37 @@ export default function LoginCard({ signInOrNot, handleSignInOrNot }) {
             Sign In
           </Typography>
         </CardHeader>
-        <CardBody className="flex flex-col gap-4">
-          <Input label="Email" size="lg" />
-          <Input label="Password" size="lg" />
-          <div className="-ml-2.5">
-            <Checkbox label="Remember Me" />
-          </div>
-        </CardBody>
+        <form onSubmit={handleSubmit}>
+          <CardBody className="flex flex-col gap-4">
+            <Input
+              type="email"
+              label="Email"
+              name="email"
+              size="lg"
+              value={formData.email}
+              onChange={handleChange}
+            />
+            <Input
+              label="Password"
+              name="password"
+              size="lg"
+              type="password"
+              value={formData.password}
+              onChange={handleChange}
+            />
+            <div className="-ml-2.5">
+              <Checkbox
+                label="Remember Me"
+                checked={rememberMe}
+                onChange={handleCheckboxChange}
+              />
+            </div>
+            <Button variant="gradient" fullWidth type="submit">
+              Sign In
+            </Button>
+          </CardBody>
+        </form>
         <CardFooter className="pt-0">
-          <Button variant="gradient" fullWidth onClick={handler}>
-            Sign In
-          </Button>
           <Typography variant="small" className="mt-6 flex justify-center">
             Don&apos;t have an account?
             <Link to="/signup">
