@@ -11,6 +11,9 @@ import {
 } from "@material-tailwind/react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+
+import { useUser } from './shared/UserContext';
+
 const API_URL = process.env.API_URL;
 
 export default function LoginCard() {
@@ -24,6 +27,9 @@ export default function LoginCard() {
   const handleCheckboxChange = () => {
     setRememberMe(!rememberMe);
   };
+
+  const { dispatch } = useUser();
+
 
   const navigate = useNavigate();
 
@@ -41,6 +47,11 @@ export default function LoginCard() {
       const response = await axios.post(`${API_URL}/user/sign-in`, formData);
 
       if (response.status === 200) {
+        const { user } = response.data;
+
+        // Dispatch a 'LOGIN' action to update user data and authentication state
+        dispatch({ type: 'LOGIN', user });
+
         navigate("/");
       } else if (response.status === 400) {
         alert("Invalid credentials");

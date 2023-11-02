@@ -2,6 +2,8 @@
 const Post = require("../models/post");
 const User = require("../models/userProfile");
 const Category = require('../models/postCategory');
+
+
 module.exports.createPost = async (req, res) => {
   try {
     const { heading, richText, } = req.body;

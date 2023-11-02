@@ -101,7 +101,16 @@ module.exports.signIn = async (req, res) => {
       // Set an HttpOnly cookie containing the token
       // HttpOnly cookies are not accessible via JavaScript, which provides a higher level of security against certain types of attacks, such as cross-site scripting (XSS) attacks.
       res.cookie("token", token, { httpOnly: true });
-      res.status(200).json({ msg: "Signed in successfully" });
+      res.status(200).json({
+        msg: "Signed in successfully",
+        user: {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          userName: user.userName,
+          // Include any other user properties to return
+        },
+      });
     });
   } catch (err) {
     console.error(err.message);
@@ -111,12 +120,13 @@ module.exports.signIn = async (req, res) => {
 
 module.exports.signOut = async (req, res) => {
   try {
+    const token = req.cookies.token;
     if (!token) {
       return res.status(401).json({ msg: "No token provided" });
     }
 
     res.clearCookie("token");
-    
+
     // also blacklist the token
 
     // Respond with a success message
@@ -144,5 +154,25 @@ module.exports.getUserProfile = async (req, res) => {
   } catch (error) {
     console.error(error.message);
     return res.status(500).send({ error: error.message });
+  }
+};
+
+module.exports.checkAuth = async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const user = await User.findById(userId);
+    res.status(200).json({
+      msg: "User is authenticated.",
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        userName: user.userName,
+        // Include any other user properties to return
+      },
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal server error" });
   }
 };
