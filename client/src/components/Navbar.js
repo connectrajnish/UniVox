@@ -20,7 +20,17 @@ import {
 import { NotificationsMenu } from "./NotificationsMenu";
 import { useNavigate, Link } from "react-router-dom";
 import Help from "./Help";
-const NavbarDark = ({ signInOrNot, handleSignInOrNot }) => {
+
+import axios from "axios";
+
+import { useUser } from "./shared/UserContext";
+
+const API_URL = process.env.API_URL;
+
+const NavbarDark = () => {
+  const { state } = useUser();
+  const signInOrNot = state.isAuthenticated;
+
   return (
     <Navbar
       variant="gradient"
@@ -65,10 +75,7 @@ const NavbarDark = ({ signInOrNot, handleSignInOrNot }) => {
         {signInOrNot ? (
           <div className="ml-auto flex gap-1 md:mr-4">
             <NotificationsMenu />
-            <ProfileMenu
-              signInOrNot={signInOrNot}
-              handleSignInOrNot={handleSignInOrNot}
-            />
+            <ProfileMenu />
           </div>
         ) : (
           <div className="ml-auto flex gap-1 md:mr-4">
@@ -121,7 +128,7 @@ const profileMenuItems = [
     icon: Cog6ToothIcon,
   },
   {
-    label: "Help",
+    label: "Reach Us",
     icon: LifebuoyIcon,
   },
   {
@@ -130,16 +137,14 @@ const profileMenuItems = [
   },
 ];
 
-function ProfileMenu({ signInOrNot, handleSignInOrNot }) {
+function ProfileMenu() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const closeMenu = () => setIsMenuOpen(false);
 
-  const [openHelpDialog, setOpenHelpDialog] = useState(false);
-
-  const handleOpenHelpDialog = () => setOpenHelpDialog(!openHelpDialog);
-
+  const { dispatch } = useUser();
   const navigate = useNavigate();
+
   const handleMenuItemClick = (label) => {
     closeMenu();
 
@@ -147,20 +152,31 @@ function ProfileMenu({ signInOrNot, handleSignInOrNot }) {
       navigate("/profile");
     } else if (label === "Edit Profile") {
       navigate("/edit-profile");
-    } else if (label === "Help") {
-      handleOpenHelpDialog();
-      <Help open={openHelpDialog} handleOpen={handleOpenHelpDialog} />;
+    } else if (label === "Reach Us") {
+        navigate('/help');
     } else if (label === "Sign Out") {
-      // Perform sign-out logic
-      // Clear authentication state (replace with your actual logic)
-      // For example, if using a state management library like Redux:
-      // dispatch(logoutAction());
-      {
-        if (signInOrNot) {
-          handleSignInOrNot();
-        }
-      }
-      navigate("/signin");
+      // Send a sign-out request to the backend
+      axios
+        .post(`${API_URL}/user/sign-out`, {}, { withCredentials: true })
+        .then((response) => {
+          // Handle the sign-out response (e.g., clear cookies, etc.)
+          // Replace the code below with your actual sign-out logic
+          // Clear authentication state
+          if (response.status === 200) {
+            // Successful sign-out
+            // Clear authentication state
+            dispatch({ type: "LOGOUT" });
+            navigate("/signin");
+          } else {
+            alert("Error signing out.");
+            console.error(`Unhandled status code: ${response.status}`);
+          }
+        })
+        .catch((error) => {
+          alert("Error signing out.");
+          console.error("Error during sign-out:", error);
+          // Handle error as needed
+        });
     }
   };
 

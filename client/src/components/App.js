@@ -6,6 +6,7 @@ import SignIn from "./SignIn";
 import SignUp from "./SignUp";
 import Discuss from "./Discuss";
 import ErrorPage from "./ErrorPage";
+import Help from "./Help";
 
 import { Routes, Route } from "react-router-dom";
 
@@ -20,6 +21,7 @@ const App = () => {
       <div className="m-2">
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/help" element={<Help />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/signin" element={<SignIn signInOrNot={signInOrNot} handleSignInOrNot={handleSignInOrNot}/>} />
           <Route path="/signup" element={<SignUp />} />

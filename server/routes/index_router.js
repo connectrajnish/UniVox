@@ -4,6 +4,8 @@ const router = express.Router();
 const homeController = require('../controllers/home_controller');
 router.get('/', homeController.home);
 
+router.use('/help',require('./help'));
+
 // whenever the path is '/post' then use following route which will redirect to corresponding controller's api
 router.use('/post',require('./post'));
 

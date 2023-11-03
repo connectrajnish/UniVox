@@ -70,7 +70,8 @@ export const UserProvider = ({ children }) => {
   );
 };
 
-//custom hook
+//custom hook to access the user context using the useContext hook.
+// It returns the current context value, which includes state (the user-related data and authentication state) and dispatch (a function to dispatch actions to update the state).
 export const useUser = () => {
   return useContext(UserContext);
 };
