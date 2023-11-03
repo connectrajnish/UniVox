@@ -41,12 +41,10 @@ export default function TextareaWithRichTextEditor() {
       const richText = content;
       const category = selectedItems;
       const data = { heading, category, richText };
-
+      console.log(data);
       axios
         .post(`${API_URL}/post/create-post`, data, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
+          withCredentials: true, // Include credentials
         })
         .then((response) => {
           console.log("Post successfully.");

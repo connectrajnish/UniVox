@@ -44,7 +44,7 @@ export default function LoginCard() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post(`${API_URL}/user/sign-in`, formData);
+      const response = await axios.post(`${API_URL}/user/sign-in`, formData, {withCredentials: true});
 
       if (response.status === 200) {
         const { user } = response.data;

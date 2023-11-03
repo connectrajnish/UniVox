@@ -6,17 +6,28 @@ const Category = require('../models/postCategory');
 
 module.exports.createPost = async (req, res) => {
   try {
-    const { heading, richText, } = req.body;
-    const category = req.body.category.toLowerCase(); // Convert to lowercase
+    const { heading, richText, category} = req.body;
     const userId = req.user._id;
 
-    // Check if the category already exists
-    let categoryObject = await Category.findOne({ name: category });
+    // Create an array to store category objects
+    const categoryObjects = [];
 
-    // If the category doesn't exist, create a new one
-    if (!categoryObject) {
-      categoryObject = new Category({ name: category, posts: [] });
-      await categoryObject.save();
+     // Iterate through the categories and process each one
+    for (const categoryName of category) {
+      // Convert category name to lowercase
+      const categoryLower = categoryName.toLowerCase();
+
+      // Check if the category already exists
+      let categoryObject = await Category.findOne({ name: categoryLower });
+
+      // If the category doesn't exist, create a new one
+      if (!categoryObject) {
+        categoryObject = new Category({ name: categoryLower, posts: [] });
+        await categoryObject.save();
+      }
+
+      // Add the category object to the array
+      categoryObjects.push(categoryObject);
     }
 
     // Create a new post document
@@ -24,15 +35,17 @@ module.exports.createPost = async (req, res) => {
       heading: heading,
       content: richText, // Rename richText to content
       user: userId, // Use the user ID from the request
-      category: categoryObject._id,
+      category: categoryObjects.map((cat) => cat._id),
     });
 
     // Save the post to the database
     const savedPost = await post.save();
 
     // Add the post ID to the category
-    categoryObject.posts.push(savedPost._id);
-    await categoryObject.save();
+    for (const catObj of categoryObjects) {
+      catObj.posts.push(savedPost._id);
+      await catObj.save();
+    }
 
     // Add the post ID to the user's posts array
     const user = await User.findById(userId);
