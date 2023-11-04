@@ -10,7 +10,14 @@ const PORT = process.env.PORT || 8080;
 const app = express();
 connectDB();
 
-app.use(cors({ origin: true, credentials: true }));
+app.use(
+    cors({
+      origin: true,
+      methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+      credentials: true,
+    })
+  );
+  
 app.use(express.json({ extended: false }));
 
 const bodyParser = require('body-parser');

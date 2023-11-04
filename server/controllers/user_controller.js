@@ -157,6 +157,71 @@ module.exports.getUserProfile = async (req, res) => {
   }
 };
 
+module.exports.updateUserProfile = async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const user = await User.findById(userId);
+    const updatedProfile = req.body;
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    if (updatedProfile.password) {
+      // Hash the new password before saving it
+      const hashedPassword = await bcrypt.hash(updatedProfile.password, 12);
+      user.password = hashedPassword;
+    }
+
+    if (updatedProfile.userName) {
+      let tempUser = await User.findOne({
+        userName: updatedProfile.userName.toLowerCase(),
+      });
+      if (tempUser && tempUser.id != user.id) {
+        return res
+          .status(400)
+          .json({ msg: "User already exists with that username" });
+      }
+      user.userName = updatedProfile.userName.toLowerCase();
+    }
+
+    // Use the OR operator (||) to update fields if they exist in the request body
+    user.name = updatedProfile.name || user.name;
+    user.about = updatedProfile.about || user.about;
+    user.college = updatedProfile.college || user.college;
+    user.yearOfStudy = updatedProfile.yearOfStudy || user.yearOfStudy;
+    user.linkedin = updatedProfile.linkedin || user.linkedin;
+    user.github = updatedProfile.github || user.github;
+    user.twitter = updatedProfile.twitter || user.twitter;
+    user.profilePhoto = updatedProfile.profilePhoto || user.profilePhoto;
+    user.backgroundBanner =
+      updatedProfile.backgroundBanner || user.backgroundBanner;
+
+    // Save the updated user profile
+    await user.save();
+
+    // after response, update the context
+    return res.status(200).json({
+      message: "Profile updated successfully",
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        userName: user.userName,
+        // Include any other user properties to return
+      },
+    });
+  } catch (error) {
+    console.error("Error updating user profile:", error);
+    if (error.name === "ValidationError") {
+      return res
+        .status(400)
+        .json({ error: "Validation error", details: error.errors });
+    }
+    return res.status(500).json({ error: "Internal server error" });
+  }
+};
+
 module.exports.checkAuth = async (req, res) => {
   try {
     const userId = req.user._id;

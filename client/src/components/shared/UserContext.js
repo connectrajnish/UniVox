@@ -8,7 +8,7 @@ const UserContext = createContext();
 const initialState = {
   user: null,
   isAuthenticated: false,
-  isContextReady: false
+  isContextReady: false,
 };
 // userReducer is a function that takes two arguments: state and action, defines how the state of user authentication and related data should change in response to different actions. It's typically used as a reducer function in conjunction with React's useReducer hook to manage state changes in a predictable manner.
 // state represents the current state of user authentication and related data
@@ -28,11 +28,16 @@ const userReducer = (state, action) => {
         user: null,
         isAuthenticated: false,
       };
-      case "CONTEXT_READY":
-        return {
-          ...state,
-          isContextReady: true,
-        };
+    case "CONTEXT_READY":
+      return {
+        ...state,
+        isContextReady: true,
+      };
+    case "UPDATE_PROFILE":
+      return {
+        ...state,
+        user: action.user, // Update user data
+      };
     default:
       return state;
   }

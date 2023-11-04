@@ -2,25 +2,24 @@ import React, { useState, useEffect } from "react";
 import { Button, Input, Input, CardBody } from "@material-tailwind/react";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "./shared/UserContext";
-import axios from 'axios';
+import axios from "axios";
 
 const API_URL = process.env.API_URL;
 
 const ProfileUpdateForm = () => {
-  const { state } = useUser();
+  const { state, dispatch } = useUser();
   //   console.log(state);
   const navigate = useNavigate();
   const isContextReady = state.isContextReady;
-  let username = "";
+
   useEffect(() => {
     // Fetch user profile data using the username and populate the form fields
     if (isContextReady && !state.isAuthenticated) navigate("/signin");
     if (isContextReady) {
       if (state.isAuthenticated) {
-        username = state.user.userName;
         axios
           .get(`${API_URL}/user/${state.user.userName}`)
-          .then((response) => {setUserProfile(response.data); console.log(userProfile);}) // Use response.data
+          .then((response) => setUserProfile(response.data)) // Use response.data
           .catch((error) =>
             console.error("Error fetching user profile: ", error)
           );
@@ -47,7 +46,7 @@ const ProfileUpdateForm = () => {
     "https://images.unsplash.com/photo-1579548122080-c35fd6820ecb?auto=format&fit=crop&q=80&w=1470&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
 
   const handleChange = (e) => {
-    const { name, value, type } = e.target;
+    const { name, value } = e.target;
     setUserProfile({
       ...userProfile,
       [name]: value,
@@ -58,15 +57,20 @@ const ProfileUpdateForm = () => {
     e.preventDefault();
     // Send the updated profile data to the server
     axios
-      .put(`${API_URL}/user/${username}`, userProfile)
-      .then((response) => console.log("Profile updated:", response.data))
+      .put(`${API_URL}/user/${state.user.userName}`, userProfile, {
+        withCredentials: true,
+      })
+      .then((response) => {
+        console.log("Profile updated:", response.data);
+        dispatch({ type: "UPDATE_PROFILE", user: response.data });
+      })
       .catch((error) => console.error("Error updating profile: ", error));
   };
 
   if (!isContextReady) {
     return <div>Loading...</div>;
   }
-//   console.log(userProfile);
+  //   console.log(userProfile);
   return (
     <div className="h-full ">
       <div className="bg-white rounded-lg shadow-xl pb-8">
@@ -120,6 +124,13 @@ const ProfileUpdateForm = () => {
               type="email"
               name="email"
               value={userProfile.email}
+              onChange={handleChange}
+              fullWidth
+            />
+            <Input
+              label="Password"
+              type="password"
+              name="password"
               onChange={handleChange}
               fullWidth
             />
