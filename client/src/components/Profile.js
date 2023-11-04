@@ -1,6 +1,26 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Button } from "@material-tailwind/react";
+import { useParams, Link } from "react-router-dom";
+
+const API_URL = process.env.API_URL;
+
 const Profile = () => {
+  const [userProfile, setUserProfile] = useState(null);
+  const { username } = useParams(); // Get the username from the route parameter
+  var defaultPic = "https://cdn-icons-png.flaticon.com/128/3177/3177440.png";
+  useEffect(() => {
+    // Make an API call to fetch user profile data using the username
+    // Replace 'your-api-endpoint' with the actual API endpoint
+    fetch(`${API_URL}/user/${username}`)
+      .then((response) => response.json())
+      .then((data) => setUserProfile(data))
+      .catch((error) => console.error("Error fetching user profile: ", error));
+  }, [username]);
+
+  if (!userProfile) {
+    return <div>Loading...</div>;
+  }
+  console.log(userProfile);
   return (
     <div className="h-full ">
       <div className="bg-white rounded-lg shadow-xl pb-8">
@@ -14,13 +34,15 @@ const Profile = () => {
 
         <div className="flex flex-col items-center -mt-20">
           <img
-            src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=988&q=80"
+            src={
+              userProfile.profilePhoto ? userProfile.profilePhoto : defaultPic
+            }
             className="w-40 h-40 border-4 border-white rounded-full object-cover"
           />
           <div className="flex items-center space-x-2 mt-2">
-            <p className="text-2xl text-black">Catherine</p>
+            <p className="text-2xl text-black">{userProfile.name}</p>
           </div>
-          <p className="text-gray-700">ECE Sophomore</p>
+          <p className="text-gray-700">{userProfile.status}</p>
         </div>
         <div className="flex-1 flex flex-col items-center lg:items-end justify-end px-8 mt-2">
           <Button className="flex select-none items-center gap-3 rounded-lg py-2 px-4 text-center align-middle text-white transition-all hover:shadow-lg  ">
@@ -48,50 +70,64 @@ const Profile = () => {
             <div className="flex-1 bg-white rounded-lg shadow-xl p-8">
               <h4 className="text-xl text-gray-900 font-bold">About</h4>
               <p className="mt-2 text-gray-700 text-justify">
-                Hello there! I'm Catherine, a sophomore in Electronics and
-                Communications Engineering (ECE) at IIIT Dharwad. I have a deep
-                passion for software development and enjoy working with the MERN
-                stack to create web applications that solve real-world problems.
+                {userProfile.about}
               </p>
             </div>
           </div>
           <div className="flex-1 bg-white rounded-lg shadow-xl mt-4 p-8">
             <h4 className="text-xl text-gray-900 font-bold">Discover More</h4>
             <div className="flex justify-between mt-4">
-              <a href="#" className="border border-gray-400 rounded-full p-2">
-                <i className="ri-github-fill"></i>
-              </a>
-              <a href="#" className="border border-gray-400 rounded-full p-2">
-                <i className="ri-linkedin-fill"></i>
-              </a>
-              <a href="#" className="border border-gray-400 rounded-full p-2">
-                <i className="ri-twitter-fill"></i>
-              </a>
-              <a href="#" className="border border-gray-400 rounded-full p-2">
-                <i className="ri-mail-fill"></i>
-              </a>
+              {/* use regular anchor (<a>) elements with the href attribute pointing to the external URL. */}
+              {userProfile.github && (
+                <a
+                  href={userProfile.github}
+                  className="border border-gray-400 rounded-full p-2"
+                  target="_blank" // Open link in a new tab
+                  rel="noopener noreferrer" // Recommended for security
+                >
+                  <i className="ri-github-fill"></i>
+                </a>
+              )}
+
+              {userProfile.linkedin && (
+                <a
+                  href={userProfile.linkedin}
+                  className="border border-gray-400 rounded-full p-2"
+                  target="_blank" // Open link in a new tab
+                  rel="noopener noreferrer" // Recommended for security
+                >
+                  <i className="ri-linkedin-fill"></i>
+                </a>
+              )}
+
+              {userProfile.twitter && (
+                <a
+                  href={userProfile.twitter}
+                  className="border border-gray-400 rounded-full p-2"
+                  target="_blank" // Open link in a new tab
+                  rel="noopener noreferrer" // Recommended for security. The "noopener" attribute prevents the new tab or window from having access to the window.opener object of the original page. he noreferrer attribute ensures that no referrer information is sent to the linked page. This means that the target page won't know where the request is coming from, enhancing privacy.
+                >
+                  <i className="ri-twitter-fill"></i>
+                </a>
+              )}
+
+              {userProfile.email && (
+                <a
+                  href={`mailto:${userProfile.email}`}
+                  className="border border-gray-400 rounded-full p-2"
+                  target="_blank" // Open email link in a new tab
+                >
+                  <i className="ri-mail-fill"></i>
+                </a>
+              )}
             </div>
           </div>
         </div>
       </div>
       <div className="flex-1 bg-white rounded-lg shadow-xl my-4 p-8">
-        <h4 className="text-xl text-gray-900 font-bold">Activity log</h4>
+        <h4 className="text-xl text-gray-900 font-bold">Posts</h4>
         <div className="relative px-4">
           <div className="absolute h-full border border-dashed border-opacity-20 border-secondary"></div>
-
-          {/* <!-- start::Timeline item --> */}
-          <div className="flex items-center w-full my-6 -ml-1.5">
-            <div className="w-1/12 z-10">
-              <div className="w-3.5 h-3.5 bg-blue-600 rounded-full"></div>
-            </div>
-            <div className="w-11/12">
-              <p className="text-sm text-black">
-                Profile informations changed.
-              </p>
-              <p className="text-xs text-gray-500">3 min ago</p>
-            </div>
-          </div>
-          {/* <!-- end::Timeline item --> */}
         </div>
       </div>
     </div>
