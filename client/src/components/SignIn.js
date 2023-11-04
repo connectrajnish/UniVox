@@ -28,10 +28,11 @@ export default function LoginCard() {
     setRememberMe(!rememberMe);
   };
 
-  const { dispatch } = useUser();
-
+  const { dispatch, state } = useUser();
 
   const navigate = useNavigate();
+  
+  // if(state && state.isAuthenticated) navigate(`profile/${state.user.userName}`);
 
   const handleChange = (e) => {
     const { name, value } = e.target;

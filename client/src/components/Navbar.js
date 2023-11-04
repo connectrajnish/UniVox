@@ -19,7 +19,6 @@ import {
 } from "@heroicons/react/24/solid";
 import { NotificationsMenu } from "./NotificationsMenu";
 import { useNavigate, Link } from "react-router-dom";
-import Help from "./Help";
 
 import axios from "axios";
 

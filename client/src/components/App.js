@@ -2,6 +2,7 @@ import React from "react";
 import Navbar from "./Navbar";
 import Home from "./Home";
 import Profile from "./Profile";
+import ProfileUpdate from "./ProfileUpdate";
 import SignIn from "./SignIn";
 import SignUp from "./SignUp";
 import Discuss from "./Discuss";
@@ -22,6 +23,7 @@ const App = () => {
           <Route path="/" element={<Home />} />
           <Route path="/help" element={<Help />} />
           <Route path="/profile/:username" element={<Profile />} />
+          <Route path="/profile/update" element={<ProfileUpdate />} />
           <Route path="/signin" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/post" element={<Discuss />} />

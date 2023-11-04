@@ -7,7 +7,8 @@ const API_URL = process.env.API_URL;
 const Profile = () => {
   const [userProfile, setUserProfile] = useState(null);
   const { username } = useParams(); // Get the username from the route parameter
-  var defaultPic = "https://cdn-icons-png.flaticon.com/128/3177/3177440.png";
+  const defaultPic = "https://cdn-icons-png.flaticon.com/128/3177/3177440.png";
+  const defaultBackgroundBanner = "https://images.unsplash.com/photo-1579548122080-c35fd6820ecb?auto=format&fit=crop&q=80&w=1470&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
   useEffect(() => {
     // Make an API call to fetch user profile data using the username
     // Replace 'your-api-endpoint' with the actual API endpoint
@@ -26,7 +27,9 @@ const Profile = () => {
       <div className="bg-white rounded-lg shadow-xl pb-8">
         <div className="w-full h-[250px] overflow-hidden">
           <img
-            src="https://images.unsplash.com/photo-1579591165250-987f23844669?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80"
+            src={
+              userProfile.backgroundBanner ? userProfile.backgroundBanner : defaultBackgroundBanner
+            }
             className="w-full h-full rounded-tl-lg rounded-tr-lg object-cover"
             alt="Image"
           />
