@@ -51,7 +51,7 @@ export default function TextareaWithRichTextEditor() {
           setContent("");
           setHeading("");
           setSelectedItems([]);
-          navigate(`${API_URL}/post/${response.data.postId}`);
+          navigate(`${response.data.postId}`);
         })
         .catch((error) => {
           console.error("Failed to post", error);
