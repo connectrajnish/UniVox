@@ -1,12 +1,15 @@
 import Card from "./Card";
-const Content = () => {
-    return (
-        <div>
-            <div className="mb-4"><Card /></div>
-            
-            
+const Content = ({ posts = { posts } }) => {
+    console.log(posts)
+  return (
+    <div>
+      {posts.map((post) => (
+        <div className="mb-4" key={post._id}>
+          <Card post={post} />
         </div>
-    );
-}
+      ))}
+    </div>
+  );
+};
 
 export default Content;
