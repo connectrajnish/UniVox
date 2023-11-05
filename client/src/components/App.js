@@ -9,10 +9,16 @@ import Discuss from "./Discuss";
 import ErrorPage from "./ErrorPage";
 import Help from "./Help";
 import Post from "./Post";
+import { useUser } from "./shared/UserContext";
 
 import { Routes, Route } from "react-router-dom";
 
 const App = () => {
+  const {state} = useUser();
+
+  if(!state.isContextReady)
+    return <div>Loading...</div>
+
   return (
     <div className="w-full flex flex-col">
       <div className="bg-gray-100 sticky z-1000 w-full flex h-auto top-0 border-b-4 rounded-b-xl">
@@ -23,7 +29,7 @@ const App = () => {
           <Route path="/" element={<Home />} />
           <Route path="/help" element={<Help />} />
           <Route path="/profile/:username" element={<Profile />} />
-          <Route path="/profile/update" element={<ProfileUpdate />} />
+          <Route path="/update-profile" element={<ProfileUpdate />} />
           <Route path="/signin" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/post" element={<Discuss />} />

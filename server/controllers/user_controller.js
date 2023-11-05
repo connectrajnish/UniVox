@@ -108,6 +108,7 @@ module.exports.signIn = async (req, res) => {
           name: user.name,
           email: user.email,
           userName: user.userName,
+          profilePhoto: user.profilePhoto,
           // Include any other user properties to return
         },
       });
@@ -208,6 +209,7 @@ module.exports.updateUserProfile = async (req, res) => {
         name: user.name,
         email: user.email,
         userName: user.userName,
+        profilePhoto: user.profilePhoto,
         // Include any other user properties to return
       },
     });
@@ -233,6 +235,7 @@ module.exports.checkAuth = async (req, res) => {
         name: user.name,
         email: user.email,
         userName: user.userName,
+        profilePhoto: user.profilePhoto,
         // Include any other user properties to return
       },
     });

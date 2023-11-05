@@ -56,6 +56,13 @@ const ProfileUpdateForm = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     // Send the updated profile data to the server
+    if (profilePhotoFile) {
+      userProfile.profilePhoto = profilePhotoFile;
+    }
+    if (backgroundBannerFile) {
+      userProfile.backgroundBanner = backgroundBannerFile;
+    }
+  
     axios
       .put(`${API_URL}/user/${state.user.userName}`, userProfile, {
         withCredentials: true,
@@ -63,6 +70,7 @@ const ProfileUpdateForm = () => {
       .then((response) => {
         console.log("Profile updated:", response.data);
         dispatch({ type: "UPDATE_PROFILE", user: response.data });
+        alert("Profile updated Successfully");
       })
       .catch((error) => console.error("Error updating profile: ", error));
   };
@@ -70,28 +78,86 @@ const ProfileUpdateForm = () => {
   if (!isContextReady) {
     return <div>Loading...</div>;
   }
+  // Add state variables to store selected files
+  const [profilePhotoFile, setProfilePhotoFile] = useState(null);
+  const [profilePhotoPreview, setProfilePhotoPreview] = useState(null);
+
+  const [backgroundBannerFile, setBackgroundBannerFile] = useState(null);
+
+  // Add file change handlers
+ const handleProfilePhotoChange = (e) => {
+    const file = e.target.files[0];
+
+    if (file) {
+      setProfilePhotoFile(file);
+
+      // Create a preview of the selected profile photo
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setProfilePhotoPreview(e.target.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+
+  const handleBackgroundBannerChange = (e) => {
+    setBackgroundBannerFile(e.target.files[0]);
+  };
   //   console.log(userProfile);
   return (
     <div className="h-full ">
       <div className="bg-white rounded-lg shadow-xl pb-8">
         <div className="w-full h-[250px] overflow-hidden">
-          <img
-            src={
-              userProfile.backgroundBanner
-                ? userProfile.backgroundBanner
-                : defaultBackgroundBanner
-            }
-            className="w-full h-full rounded-tl-lg rounded-tr-lg object-cover"
-            alt="Image"
+          <label
+            htmlFor="backgroundBannerInput"
+            className="cursor-pointer text-white text-lg"
+          >
+            {backgroundBannerFile ? (
+              <img src={URL.createObjectURL(backgroundBannerFile)} alt="Image Preview" />
+            ) : (
+              <img
+                src={
+                  userProfile.backgroundBanner
+                    ? userProfile.backgroundBanner
+                    : defaultBackgroundBanner
+                }
+                className="w-full h-full rounded-tl-lg rounded-tr-lg object-cover"
+                alt="Image"
+              />
+            )}
+          </label>
+          <Input
+            fullWidth
+            id="backgroundBannerInput"
+            type="file"
+            name="backgroundBanner"
+            style={{ display: "none" }}
+            onChange={handleBackgroundBannerChange}
           />
         </div>
 
         <div className="flex flex-col items-center -mt-20">
-          <img
-            src={
-              userProfile.profilePhoto ? userProfile.profilePhoto : defaultPic
-            }
-            className="w-40 h-40 border-4 border-white rounded-full object-cover"
+        <label htmlFor="profilePhotoInput" className="cursor-pointer">
+        {profilePhotoPreview ? (
+            <img src={profilePhotoPreview} alt="Profile Photo" className="w-40 h-40 border-4 border-white rounded-full object-cover" />
+          ) : (
+            <img
+              src={userProfile.profilePhoto ? userProfile.profilePhoto : defaultPic}
+              className="w-40 h-40 border-4 border-white rounded-full object-cover"
+              alt="Profile Photo"
+            />
+          )}
+          
+            
+          </label>
+          <Input
+            fullWidth
+            id="profilePhotoInput"
+            type="file"
+            name="profilePhoto"
+            style={{ display: "none" }}
+            onChange={handleProfilePhotoChange}
           />
           <div className="flex items-center space-x-2 mt-2">
             <p className="text-2xl text-black">{userProfile.name}</p>

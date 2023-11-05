@@ -47,7 +47,7 @@ const Profile = () => {
           </div>
           <p className="text-gray-700">{userProfile.status}</p>
         </div>
-        <div className="flex-1 flex flex-col items-center lg:items-end justify-end px-8 mt-2">
+        {/* <div className="flex-1 flex flex-col items-center lg:items-end justify-end px-8 mt-2">
           <Button className="flex select-none items-center gap-3 rounded-lg py-2 px-4 text-center align-middle text-white transition-all hover:shadow-lg  ">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -65,7 +65,7 @@ const Profile = () => {
             </svg>
             Message
           </Button>
-        </div>
+        </div> */}
       </div>
       <div className="my-4 flex flex-col 2xl:flex-row space-y-4 2xl:space-y-0 2xl:space-x-4">
         <div className="w-full flex flex-col 2xl:w-1/3">

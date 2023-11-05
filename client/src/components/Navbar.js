@@ -139,18 +139,20 @@ const profileMenuItems = [
 function ProfileMenu() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
+  const defaultPic = "https://cdn-icons-png.flaticon.com/128/3177/3177440.png";
+
   const closeMenu = () => setIsMenuOpen(false);
 
-  const { dispatch } = useUser();
+  const { state, dispatch } = useUser();
   const navigate = useNavigate();
 
   const handleMenuItemClick = (label) => {
     closeMenu();
 
     if (label === "My Profile") {
-      navigate("/profile");
+      navigate(`/profile/${state.user.userName}`);
     } else if (label === "Edit Profile") {
-      navigate("/edit-profile");
+      navigate("/update-profile");
     } else if (label === "Reach Us") {
         navigate('/help');
     } else if (label === "Sign Out") {
@@ -193,7 +195,9 @@ function ProfileMenu() {
             size="sm"
             alt="Catherine"
             className="border border-white p-0.5 object-cover"
-            src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=988&q=80"
+            src={
+              state.user.profilePhoto ? state.user.profilePhoto : defaultPic
+            }
           />
           <ChevronDownIcon
             strokeWidth={2.5}
