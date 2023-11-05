@@ -62,7 +62,7 @@ const ProfileUpdateForm = () => {
     if (backgroundBannerFile) {
       userProfile.backgroundBanner = backgroundBannerFile;
     }
-  
+
     axios
       .put(`${API_URL}/user/${state.user.userName}`, userProfile, {
         withCredentials: true,
@@ -85,7 +85,7 @@ const ProfileUpdateForm = () => {
   const [backgroundBannerFile, setBackgroundBannerFile] = useState(null);
 
   // Add file change handlers
- const handleProfilePhotoChange = (e) => {
+  const handleProfilePhotoChange = (e) => {
     const file = e.target.files[0];
 
     if (file) {
@@ -100,7 +100,6 @@ const ProfileUpdateForm = () => {
     }
   };
 
-
   const handleBackgroundBannerChange = (e) => {
     setBackgroundBannerFile(e.target.files[0]);
   };
@@ -114,7 +113,10 @@ const ProfileUpdateForm = () => {
             className="cursor-pointer text-white text-lg"
           >
             {backgroundBannerFile ? (
-              <img src={URL.createObjectURL(backgroundBannerFile)} alt="Image Preview" />
+              <img
+                src={URL.createObjectURL(backgroundBannerFile)}
+                alt="Image Preview"
+              />
             ) : (
               <img
                 src={
@@ -138,18 +140,24 @@ const ProfileUpdateForm = () => {
         </div>
 
         <div className="flex flex-col items-center -mt-20">
-        <label htmlFor="profilePhotoInput" className="cursor-pointer">
-        {profilePhotoPreview ? (
-            <img src={profilePhotoPreview} alt="Profile Photo" className="w-40 h-40 border-4 border-white rounded-full object-cover" />
-          ) : (
-            <img
-              src={userProfile.profilePhoto ? userProfile.profilePhoto : defaultPic}
-              className="w-40 h-40 border-4 border-white rounded-full object-cover"
-              alt="Profile Photo"
-            />
-          )}
-          
-            
+          <label htmlFor="profilePhotoInput" className="cursor-pointer">
+            {profilePhotoPreview ? (
+              <img
+                src={profilePhotoPreview}
+                alt="Profile Photo"
+                className="w-40 h-40 border-4 border-white rounded-full object-cover"
+              />
+            ) : (
+              <img
+                src={
+                  userProfile.profilePhoto
+                    ? userProfile.profilePhoto
+                    : defaultPic
+                }
+                className="w-40 h-40 border-4 border-white rounded-full object-cover"
+                alt="Profile Photo"
+              />
+            )}
           </label>
           <Input
             fullWidth
