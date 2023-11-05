@@ -111,7 +111,7 @@ module.exports.upvotePost = async (req, res) => {
     // Respond with the updated post data
     res
       .status(200)
-      .json({ postId: updatedPost._id, upvotes: updatedPost.upvotes.length });
+      .json({ postId: updatedPost._id, upvotes: updatedPost.upvotes});
   } catch (error) {
     console.error(error);
     res.status(500).json({ msg: "Failed to upvote the post.", error: error });

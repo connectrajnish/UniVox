@@ -55,13 +55,13 @@ const ProfileUpdateForm = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Send the updated profile data to the server
-    if (profilePhotoFile) {
-      userProfile.profilePhoto = profilePhotoFile;
-    }
-    if (backgroundBannerFile) {
-      userProfile.backgroundBanner = backgroundBannerFile;
-    }
+    // Send the updated profile data to the server when backend is complete
+    // if (profilePhotoFile) {
+    //   userProfile.profilePhoto = profilePhotoFile;
+    // }
+    // if (backgroundBannerFile) {
+    //   userProfile.backgroundBanner = backgroundBannerFile;
+    // }
 
     axios
       .put(`${API_URL}/user/${state.user.userName}`, userProfile, {
