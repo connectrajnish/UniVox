@@ -143,8 +143,14 @@ module.exports.getAPost = async (req, res) => {
 module.exports.getAllPosts = async (req, res) => {
   try {
     // Fetch all posts from the database
-    const posts = await Post.find().populate('category', 'name');
-
+    const posts = await Post.find()
+    .populate({
+      path: 'user',
+      model: 'UserProfile',
+      select: 'name status profilePhoto',
+    })
+    .populate('category', 'name');
+    
     // Respond with the array of post data
     res.status(200).json(posts);
   } catch (error) {

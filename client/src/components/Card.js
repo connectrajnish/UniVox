@@ -18,14 +18,13 @@ import { useNavigate } from "react-router-dom";
 const API_URL = process.env.API_URL;
 
 export default function CardComponent({ post }) {
+  console.log(post)
   const {state} = useUser();
-  const name = "Catherine";
-  const srcUrl =
-    "https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=988&q=80";
-  const tag = "ECE Sophomore";
+  const name = post.user.name;
+  const srcUrl = post.user.profilePhoto?post.user.profilePhoto:"https://cdn-icons-png.flaticon.com/128/3177/3177440.png";
+  const tag = post.user.status;
 
   const [userHasUpvoted, setUserHasUpvoted] = useState(post.upvotes.includes(state.user.id));
-  console.log(userHasUpvoted)
   // for dialog
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(!open);
