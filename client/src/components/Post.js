@@ -65,7 +65,6 @@ export default function PostDetail() {
     return <div>Loading...</div>;
   }
 
-  console.log(post)
   const name = post.user.name;
   const srcUrl = post.user.profilePhoto ? post.user.profilePhoto: "https://cdn-icons-png.flaticon.com/128/3177/3177440.png";
   const tag = post.user.status;
