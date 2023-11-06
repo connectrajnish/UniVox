@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Card,
   CardHeader,
@@ -18,13 +18,22 @@ import { useNavigate } from "react-router-dom";
 const API_URL = process.env.API_URL;
 
 export default function CardComponent({ post }) {
-  console.log(post)
+
   const {state} = useUser();
   const name = post.user.name;
   const srcUrl = post.user.profilePhoto?post.user.profilePhoto:"https://cdn-icons-png.flaticon.com/128/3177/3177440.png";
   const tag = post.user.status;
 
-  const [userHasUpvoted, setUserHasUpvoted] = useState(post.upvotes.includes(state.user.id));
+  const [userHasUpvoted, setUserHasUpvoted] = useState(false);
+
+  useEffect(() => {
+    if (state.isAuthenticated) {
+      setUserHasUpvoted(post.upvotes.includes(state.user.id));
+    }
+  }, [state.isAuthenticated, post.upvotes, state.user]);
+
+
+
   // for dialog
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(!open);
