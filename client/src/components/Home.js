@@ -26,6 +26,13 @@ const Home = () => {
       });
   }, []);
 
+  const findTop3Posts = () => {
+    const sortedPosts = [...posts].sort((a, b) => b.upvotes - a.upvotes);
+    return sortedPosts.slice(0, 3);
+  };
+
+  const top3Posts = findTop3Posts();
+
   return (
     <div className="flex flex-col md:flex-row p-0 m-0">
       {/* Left Sidebar */}
@@ -45,7 +52,7 @@ const Home = () => {
 
       {/* Right Sidebar */}
       <div className="md:w-1/5 bg-gray-200 rounded-lg max-h-screen overflow-y-auto no-scrollbar">
-        <RightSideBar />
+        {!loading && <RightSideBar posts={top3Posts} />}
       </div>
     </div>
   );

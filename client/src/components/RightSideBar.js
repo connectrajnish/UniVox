@@ -1,24 +1,21 @@
 import React from "react";
-import {
-  QuestionMarkCircleIcon,
-} from "@heroicons/react/24/outline";
 import Chip from './Chip'
+import { Link } from "react-router-dom"; // Import Link from React Router
 
-const RightSideBar = () => {
+const RightSideBar = ({posts}) => {
   return (
     <div className="flex flex-col p-3">
       {/* Trending Posts */}
       <div className="mx-1 mt-5">
         <Chip icon={<TrendingIcon />} text={"Trending"}/>
         {/* List of trending posts */}
-        <div className="my-3 px-2">
-          <a href="#trending-post-1">Trending Post 1</a>
-        </div>
-        <div className="my-3 px-2">
-          <a href="#trending-post-2">Trending Post 2</a>
-        </div>
-        <div className="my-3 px-2">
-          <a href="#trending-post-3">Trending Post 3</a>
+        <div>
+        {posts.map((post) => (
+          <div key={post._id} className="my-3 px-2">
+            {/* Use the Link component to create a link to the post's page */}
+            <Link to={`/post/${post._id}`}>{post.heading}</Link>
+          </div>
+        ))}
         </div>
         {/* Add more trending posts as needed */}
       </div>
