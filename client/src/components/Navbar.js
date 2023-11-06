@@ -29,6 +29,15 @@ const API_URL = process.env.API_URL;
 const NavbarDark = () => {
   const { state } = useUser();
   const signInOrNot = state.isAuthenticated;
+  const [query, setQuery] = useState(""); // State to store the search query
+  const [searchResults, setSearchResults] = useState([]);
+
+  const handleSearch = () => {
+    if (query.trim() !== "") {
+      // Navigate to the search results page with the search query as a parameter
+      navigate(`/post/search?q=${query}`);
+    }
+  };
 
   return (
     <Navbar
@@ -58,17 +67,21 @@ const NavbarDark = () => {
             containerProps={{
               className: "min-w-[100px]",
             }}
+            value={query} // Bind the value of the input field to the query state
+            onChange={(e) => setQuery(e.target.value)}
           />
 
-          <Button
-            type="button"
-            onClick={() => {}}
-            size="sm"
-            color="white"
-            className="!absolute right-1 top-1 rounded"
-          >
-            <SearchIcon />
-          </Button>
+          <Link to={`/post/search?q=${query}`}>
+            <Button
+              type="button"
+              onClick={handleSearch}
+              size="sm"
+              color="white"
+              className="!absolute right-1 top-1 rounded"
+            >
+              <SearchIcon />
+            </Button>
+          </Link>
         </div>
 
         {signInOrNot ? (
@@ -154,7 +167,7 @@ function ProfileMenu() {
     } else if (label === "Edit Profile") {
       navigate("/update-profile");
     } else if (label === "Reach Us") {
-        navigate('/help');
+      navigate("/help");
     } else if (label === "Sign Out") {
       // Send a sign-out request to the backend
       axios
@@ -195,9 +208,7 @@ function ProfileMenu() {
             size="sm"
             alt="Catherine"
             className="border border-white p-0.5 object-cover"
-            src={
-              state.user.profilePhoto ? state.user.profilePhoto : defaultPic
-            }
+            src={state.user.profilePhoto ? state.user.profilePhoto : defaultPic}
           />
           <ChevronDownIcon
             strokeWidth={2.5}

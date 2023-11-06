@@ -2,24 +2,27 @@ import React from "react";
 import Chip from './Chip'
 import { Link } from "react-router-dom"; // Import Link from React Router
 
-const RightSideBar = ({posts}) => {
+const RightSideBar = ({ posts }) => {
   return (
     <div className="flex flex-col p-3">
       {/* Trending Posts */}
       <div className="mx-1 mt-5">
-        <Chip icon={<TrendingIcon />} text={"Trending"}/>
+        <Chip icon={<TrendingIcon />} text={"Trending"} />
         {/* List of trending posts */}
         <div>
-        {posts.map((post) => (
-          <div key={post._id} className="my-3 px-2">
-            {/* Use the Link component to create a link to the post's page */}
-            <Link to={`/post/${post._id}`}>{post.heading}</Link>
-          </div>
-        ))}
+          {posts ? (
+            posts.map((post) => (
+              <div key={post._id} className="my-3 px-2">
+                {/* Use the Link component to create a link to the post's page */}
+                <Link to={`/post/${post._id}`}>{post.heading}</Link>
+              </div>
+            ))
+          ) : (
+            <p>Loading trending posts...</p>
+          )}
         </div>
         {/* Add more trending posts as needed */}
       </div>
-
     </div>
   );
 };

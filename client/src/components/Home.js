@@ -10,6 +10,7 @@ const API_URL = process.env.API_URL;
 const Home = () => {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [top3Posts, setTop3Posts] = useState([]); // State for top 3 posts
 
   useEffect(() => {
     // Fetch all posts from the backend when the component mounts
@@ -19,6 +20,10 @@ const Home = () => {
         // Set the retrieved posts in the state
         setPosts(response.data);
         setLoading(false);
+
+        // Calculate the top 3 posts
+        const sortedPosts = [...response.data].sort((a, b) => b.upvotes - a.upvotes);
+        setTop3Posts(sortedPosts.slice(0, 3));
       })
       .catch((error) => {
         console.error(error);
@@ -26,12 +31,7 @@ const Home = () => {
       });
   }, []);
 
-  const findTop3Posts = () => {
-    const sortedPosts = [...posts].sort((a, b) => b.upvotes - a.upvotes);
-    return sortedPosts.slice(0, 3);
-  };
 
-  const top3Posts = findTop3Posts();
 
   return (
     <div className="flex flex-col md:flex-row p-0 m-0">
