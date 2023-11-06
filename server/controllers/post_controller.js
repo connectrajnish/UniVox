@@ -213,3 +213,40 @@ module.exports.deletePost = async (req, res) => {
     res.status(500).json({ error: "Failed to delete the post" });
   }
 };
+
+//controller to search
+module.exports.searchPost = async (req, res) => {
+  try {
+    const query = req.query.q;
+
+    if (!query) {
+      // Handle the case where no query is provided
+      return res.status(400).json({ error: "No search query provided" });
+    }
+
+    // Perform a search based on the query parameter
+    const searchResults = await performSearch(query);
+
+    res.json(searchResults);
+  } catch (error) {
+    console.error("Error:", error);
+    res.status(500).json({ error: "An error occurred while searching." });
+  }
+}
+
+async function performSearch(query) {
+  try {
+    // Use Mongoose to search for posts that match the query
+    const searchResults = await Post.find({
+      $or: [
+        { heading: { $regex: query, $options: "i" } }, // Case-insensitive search on the heading
+        { content: { $regex: query, $options: "i" } }, // Case-insensitive search on the content
+      ],
+    });
+
+    return searchResults;
+  } catch (error) {
+    console.error("Error performing search:", error);
+    throw error; // Handle the error as needed
+  }
+}

@@ -10,6 +10,7 @@ import ErrorPage from "./ErrorPage";
 import Help from "./Help";
 import Post from "./Post";
 import PostByCategory from "./PostByCategory";
+import SearchResult from './SearchResult';
 import { useUser } from "./shared/UserContext";
 
 import { Routes, Route } from "react-router-dom";
@@ -34,6 +35,7 @@ const App = () => {
           <Route path="/signin" element={<SignIn />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/post" element={<Discuss />} />
+          <Route path="/post/search" element={<SearchResult />} />
           <Route path="/post/explore/:category" element={<PostByCategory />} />
           <Route path="/post/:id" element={<Post />} />
           <Route path="*" element={<ErrorPage />} />

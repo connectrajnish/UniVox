@@ -30,8 +30,8 @@ const NavbarDark = () => {
   const { state } = useUser();
   const signInOrNot = state.isAuthenticated;
   const [query, setQuery] = useState(""); // State to store the search query
-  const [searchResults, setSearchResults] = useState([]);
-
+  const navigate = useNavigate();
+  
   const handleSearch = () => {
     if (query.trim() !== "") {
       // Navigate to the search results page with the search query as a parameter

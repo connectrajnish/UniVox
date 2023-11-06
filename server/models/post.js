@@ -4,14 +4,16 @@ const Schema = mongoose.Schema;
 const postSchema = new Schema({
     heading: {
       type: String,
-      required: true
+      required: true,
+      index: true, // Create an index on the heading field so that search can be efficient
     },
     coverPhoto: {
       type: String // Store the file path or URL of the cover photo
     },
     content: {
       type: String,
-      required: true
+      required: true,
+      index: true,
     },
     user: {
       type: Schema.Types.ObjectId,
