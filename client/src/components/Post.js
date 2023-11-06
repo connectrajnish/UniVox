@@ -64,10 +64,11 @@ export default function PostDetail() {
   if (!post) {
     return <div>Loading...</div>;
   }
-  const name = "Catherine";
-  const srcUrl =
-    "https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=988&q=80";
-  const tag = "ECE Sophomore";
+
+  console.log(post)
+  const name = post.user.name;
+  const srcUrl = post.user.profilePhoto ? post.user.profilePhoto: "https://cdn-icons-png.flaticon.com/128/3177/3177440.png";
+  const tag = post.user.status;
 
   return (
     <div className="max-w-4xl px-4 m-auto text-blue-gray-900">

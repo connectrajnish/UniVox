@@ -1,18 +1,17 @@
 // createPost, readPost(all and single), upvote, delete
 const Post = require("../models/post");
 const User = require("../models/userProfile");
-const Category = require('../models/postCategory');
-
+const Category = require("../models/postCategory");
 
 module.exports.createPost = async (req, res) => {
   try {
-    const { heading, richText, category} = req.body;
+    const { heading, richText, category } = req.body;
     const userId = req.user._id;
 
     // Create an array to store category objects
     const categoryObjects = [];
 
-     // Iterate through the categories and process each one
+    // Iterate through the categories and process each one
     for (const categoryName of category) {
       // Convert category name to lowercase
       const categoryLower = categoryName.toLowerCase();
@@ -66,10 +65,12 @@ module.exports.getPostsByCategory = async (req, res) => {
     const categoryName = req.params.categoryName.toLowerCase(); // Get the category name from the request parameters
 
     // Find the category by name
-    const category = await Category.findOne({ name: categoryName }).populate('posts');
+    const category = await Category.findOne({ name: categoryName }).populate(
+      "posts"
+    );
 
     if (!category) {
-      return res.status(404).json({ error: 'Category not found' });
+      return res.status(404).json({ error: "Category not found" });
     }
 
     // Get the posts associated with the category
@@ -78,7 +79,7 @@ module.exports.getPostsByCategory = async (req, res) => {
     res.status(200).json({ posts });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Failed to fetch posts by category' });
+    res.status(500).json({ error: "Failed to fetch posts by category" });
   }
 };
 
@@ -111,7 +112,7 @@ module.exports.upvotePost = async (req, res) => {
     // Respond with the updated post data
     res
       .status(200)
-      .json({ postId: updatedPost._id, upvotes: updatedPost.upvotes});
+      .json({ postId: updatedPost._id, upvotes: updatedPost.upvotes });
   } catch (error) {
     console.error(error);
     res.status(500).json({ msg: "Failed to upvote the post.", error: error });
@@ -124,7 +125,12 @@ module.exports.getAPost = async (req, res) => {
     const postId = req.params.id;
 
     // Find the post by ID
-    const post = await Post.findById(postId).populate('category', 'name');
+    const post = await Post.findById(postId)
+      .populate({
+        path: "user",
+        select: "name profilePhoto status",
+      })
+      .populate("category", "name");
 
     if (!post) {
       // If the post is not found, return a 404 response
@@ -144,18 +150,18 @@ module.exports.getAllPosts = async (req, res) => {
   try {
     // Fetch all posts from the database
     const posts = await Post.find()
-    .populate({
-      path: 'user',
-      model: 'UserProfile',
-      select: 'name status profilePhoto',
-    })
-    .populate('category', 'name');
-    
+      .populate({
+        path: "user",
+        model: "UserProfile",
+        select: "name status profilePhoto",
+      })
+      .populate("category", "name");
+
     // Respond with the array of post data
     res.status(200).json(posts);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Failed to retrieve posts.' });
+    res.status(500).json({ error: "Failed to retrieve posts." });
   }
 };
 
@@ -169,12 +175,14 @@ module.exports.deletePost = async (req, res) => {
     const post = await Post.findById(postId);
 
     if (!post) {
-      return res.status(404).json({ error: 'Post not found' });
+      return res.status(404).json({ error: "Post not found" });
     }
 
     // Check if the user making the request is the creator of the post
     if (post.user.toString() !== userId) {
-      return res.status(403).json({ error: 'You are not authorized to delete this post' });
+      return res
+        .status(403)
+        .json({ error: "You are not authorized to delete this post" });
     }
 
     // Remove the post ID from the user's posts array
@@ -185,7 +193,7 @@ module.exports.deletePost = async (req, res) => {
       user.posts.splice(postIndex, 1);
       await user.save();
     }
-    
+
     // Remove the post from the category
     const category = await Category.findById(post.category);
     const postIndexInCategory = category.posts.indexOf(postId);
@@ -199,9 +207,9 @@ module.exports.deletePost = async (req, res) => {
     await post.deleteOne();
 
     // Respond with a success message
-    res.status(200).json({ message: 'Post deleted successfully' });
+    res.status(200).json({ message: "Post deleted successfully" });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: 'Failed to delete the post' });
+    res.status(500).json({ error: "Failed to delete the post" });
   }
 };
