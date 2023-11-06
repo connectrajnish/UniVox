@@ -2,13 +2,16 @@ import React, { useState, useEffect } from "react";
 import { Button } from "@material-tailwind/react";
 import { useParams, Link } from "react-router-dom";
 
+import Content from './Content'; 
+
 const API_URL = process.env.API_URL;
 
 const Profile = () => {
   const [userProfile, setUserProfile] = useState(null);
   const { username } = useParams(); // Get the username from the route parameter
   const defaultPic = "https://cdn-icons-png.flaticon.com/128/3177/3177440.png";
-  const defaultBackgroundBanner = "https://images.unsplash.com/photo-1579548122080-c35fd6820ecb?auto=format&fit=crop&q=80&w=1470&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
+  const defaultBackgroundBanner =
+    "https://images.unsplash.com/photo-1579548122080-c35fd6820ecb?auto=format&fit=crop&q=80&w=1470&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D";
   useEffect(() => {
     // Make an API call to fetch user profile data using the username
     // Replace 'your-api-endpoint' with the actual API endpoint
@@ -28,7 +31,9 @@ const Profile = () => {
         <div className="w-full h-[250px] overflow-hidden">
           <img
             src={
-              userProfile.backgroundBanner ? userProfile.backgroundBanner : defaultBackgroundBanner
+              userProfile.backgroundBanner
+                ? userProfile.backgroundBanner
+                : defaultBackgroundBanner
             }
             className="w-full h-full rounded-tl-lg rounded-tr-lg object-cover"
             alt="Image"
@@ -129,8 +134,8 @@ const Profile = () => {
       </div>
       <div className="flex-1 bg-white rounded-lg shadow-xl my-4 p-8">
         <h4 className="text-xl text-gray-900 font-bold">Posts</h4>
-        <div className="relative px-4">
-          <div className="absolute h-full border border-dashed border-opacity-20 border-secondary"></div>
+        <div className="m-auto pt-2">
+            <Content posts={userProfile.posts} />
         </div>
       </div>
     </div>
