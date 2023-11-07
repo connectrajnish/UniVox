@@ -131,6 +131,7 @@ export default function CardComponent({ post }) {
           handleOpen={handleOpen}
           title={post.heading}
           content={post.content}
+          postId={post._id}
           AvatarIdentity={<AvatarIdentity name={name} src={srcUrl} tag={tag} />}
         />
       </CardFooter>
