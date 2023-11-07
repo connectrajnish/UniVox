@@ -73,7 +73,7 @@ export default function PostDetail() {
   return (
     <div className="max-w-4xl px-4 m-auto text-blue-gray-900">
       <div className="bg-white p-4 rounded-lg shadow-lg mt-4">
-        <div className="flex items-center justify-between">
+        <div className="flex items-center justify-between mx-3 gap-4">
           <Typography variant="h2">{post.heading}</Typography>
           <AvatarIdentity
             className="mx-20"
