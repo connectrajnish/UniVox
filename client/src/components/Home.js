@@ -23,7 +23,6 @@ const Home = () => {
 
         // Calculate the top 3 posts
         const sortedPosts = [...response.data].sort((a, b) => b.upvotes.length - a.upvotes.length);
-        console.log(sortedPosts)
         setTop3Posts(sortedPosts.slice(0, 3));
       })
       .catch((error) => {

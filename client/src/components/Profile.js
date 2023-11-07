@@ -24,7 +24,7 @@ const Profile = () => {
   if (!userProfile) {
     return <div>Loading...</div>;
   }
-  console.log(userProfile);
+  
   return (
     <div className="h-full ">
       <div className="bg-white rounded-lg shadow-xl pb-8">

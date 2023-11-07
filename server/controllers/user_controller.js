@@ -144,7 +144,13 @@ module.exports.getUserProfile = async (req, res) => {
     const userName = req.params.username;
     const userProfile = await User.findOne({ userName: userName })
       .select("-password")
-      .populate("posts");
+      .populate({
+        path: "posts", // Populate the "posts" array with Post documents
+        populate: {
+          path: "user", // Populate the "user" field within each Post document
+          select: "name profilePhoto status", // Select the fields you want to populate
+        },
+      });
 
     if (!userProfile) {
       return res.status(404).json({ error: "User not found" });
