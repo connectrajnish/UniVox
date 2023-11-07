@@ -65,9 +65,13 @@ module.exports.getPostsByCategory = async (req, res) => {
     const categoryName = req.params.categoryName.toLowerCase(); // Get the category name from the request parameters
 
     // Find the category by name
-    const category = await Category.findOne({ name: categoryName }).populate(
-      "posts"
-    );
+    const category = await Category.findOne({ name: categoryName }).populate({
+      path: "posts", // Populate the "posts" array with Post documents
+      populate: {
+        path: "user", // Populate the "user" field within each Post document
+        select: "name profilePhoto status", // Select the fields you want to populate
+      },
+    });
 
     if (!category) {
       return res.status(404).json({ error: "Category not found" });
@@ -232,7 +236,7 @@ module.exports.searchPost = async (req, res) => {
     console.error("Error:", error);
     res.status(500).json({ error: "An error occurred while searching." });
   }
-}
+};
 
 async function performSearch(query) {
   try {

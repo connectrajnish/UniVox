@@ -24,6 +24,7 @@ export default function PostDetail() {
         if (response.status === 200) {
           setPost(response.data);
           // Fetch related posts based on the category ID
+          //change the category[0] to a map and fetch all the related posts
           if (response.data.category) {
             axios
               .get(
