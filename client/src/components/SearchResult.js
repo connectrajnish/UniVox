@@ -22,8 +22,6 @@ const SearchResults = () => {
     }
   }, [query]);
 
-  console.log(searchResults)
-
   return (
     <div>
       {isLoading ? (
