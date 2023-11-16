@@ -1,52 +1,89 @@
-import React from "react";
-import {
-  Button,
-  Dialog,
-  DialogHeader,
-  DialogBody,
-  DialogFooter,
-  Input,
-  Textarea,
-} from "@material-tailwind/react";
- 
-export default function HelpDialog({open, handleOpen}) {
-  
- 
+import React, { useState } from "react";
+import { Button, Input, Textarea, Typography } from "@material-tailwind/react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+
+const API_URL = process.env.API_URL;
+
+export default function Help() {
+  const [formData, setFormData] = useState({
+    username: "",
+    email: "",
+    message: "",
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    try {
+      // Send the form data to your backend server using Axios or fetch
+      const response = await axios.post(`${API_URL}/help`, formData);
+
+      // Handle the response as needed
+      console.log("Form data sent successfully:", response.data);
+
+      // Clear the form
+      setFormData({
+        username: "",
+        email: "",
+        message: "",
+      });
+    } catch (error) {
+      alert("Error")
+      console.error("Error sending form data:", error);
+    }
+  };
+  const navigate = useNavigate();
   return (
-    <>
-      <Dialog open={open} handler={handleOpen}>
-        <div className="flex items-center justify-between">
-          <DialogHeader>Ask Help</DialogHeader>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 24 24"
-            fill="currentColor"
-            className="mr-3 h-5 w-5"
-            onClick={handleOpen}
-          >
-            <path
-              fillRule="evenodd"
-              d="M5.47 5.47a.75.75 0 011.06 0L12 10.94l5.47-5.47a.75.75 0 111.06 1.06L13.06 12l5.47 5.47a.75.75 0 11-1.06 1.06L12 13.06l-5.47 5.47a.75.75 0 01-1.06-1.06L10.94 12 5.47 6.53a.75.75 0 010-1.06z"
-              clipRule="evenodd"
-            />
-          </svg>
+    <div className="max-w-3xl m-auto text-blue-gray-900">
+      <div className="flex items-center justify-between">
+        <Typography variant="h4">Reach out to us</Typography>
+      </div>
+      <hr className="my-3" />
+      <form onSubmit={handleSubmit}>
+        <div className="grid gap-6">
+          <Input
+            required
+            type="text"
+            name="username"
+            label="Username"
+            value={formData.username}
+            onChange={handleChange}
+          />
+          <Input
+            required
+            type="email"
+            name="email"
+            label="E-mail"
+            value={formData.email}
+            onChange={handleChange}
+          />
+          <Textarea
+            required
+            name="message"
+            label="Message"
+            value={formData.message}
+            onChange={handleChange}
+          />
         </div>
-        <DialogBody divider>
-          <div className="grid gap-6">
-            <Input label="Username" />
-            <Input label="E-mail" />
-            <Textarea label="Message" />
-          </div>
-        </DialogBody>
-        <DialogFooter className="space-x-2">
-          <Button variant="outlined" color="red" onClick={handleOpen}>
-            close
+        <hr className="my-3" />
+        <div className="flex justify-end">
+          <Button variant="outlined" color="red" className="mx-2" onClick={()=>{navigate('/')}}>
+            Discard
           </Button>
-          <Button variant="gradient" color="green" onClick={handleOpen}>
-            send
+          <Button type="submit" variant="gradient" color="green">
+            Send
           </Button>
-        </DialogFooter>
-      </Dialog>
-    </>
+        </div>
+      </form>
+    </div>
   );
 }

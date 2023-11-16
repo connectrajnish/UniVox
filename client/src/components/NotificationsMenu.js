@@ -55,8 +55,8 @@ export function NotificationsMenu() {
           />
           <div className="flex flex-col gap-1">
             <Typography variant="small" color="gray" className="font-normal">
-              <span className="font-medium text-blue-gray-900">Tania</span> send
-              you a message
+              <span className="font-medium text-blue-gray-900">David</span>{" "}
+              upvoted your post
             </Typography>
             <Typography
               variant="small"
@@ -76,13 +76,14 @@ export function NotificationsMenu() {
           <div className="flex flex-col gap-1">
             <Typography variant="small" color="gray" className="font-normal">
               <span className="font-medium text-blue-gray-900">Natali</span>{" "}
-              commented on your post
+              upvoted your post
             </Typography>
             <Typography
               variant="small"
               className="flex items-center gap-1 text-xs text-gray-600"
             >
-              <ClockIcon />an hour ago
+              <ClockIcon />
+              an hour ago
             </Typography>
           </div>
         </MenuItem>
@@ -101,7 +102,8 @@ export function NotificationsMenu() {
               variant="small"
               className="flex items-center gap-1 text-xs text-gray-600"
             >
-              <ClockIcon />an hour ago
+              <ClockIcon />
+              an hour ago
             </Typography>
           </div>
         </MenuItem>

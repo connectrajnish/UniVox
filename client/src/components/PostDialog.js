@@ -5,9 +5,9 @@ import {
   DialogHeader,
   DialogBody,
   DialogFooter,
-  Typography,
-  CardHeader,
 } from "@material-tailwind/react";
+
+import { Link } from "react-router-dom";
 
 export default function PostDialog({
   open,
@@ -15,6 +15,7 @@ export default function PostDialog({
   title,
   content,
   AvatarIdentity,
+  postId,
 }) {
   return (
     <Dialog
@@ -26,40 +27,53 @@ export default function PostDialog({
         unmount: { scale: 0.9, y: -100 },
       }}
     >
-      <DialogHeader className="justify-between">
+      <DialogHeader className="flex justify-between">
         {title}
-        <IconButton color="red" size="sm" variant="text" onClick={handleOpen}>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            strokeWidth={2}
-            className="h-5 w-5"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M6 18L18 6M6 6l12 12"
-            />
-          </svg>
-        </IconButton>
+        <div className="flex justify-between items-center gap-2">
+          <Link to={`/post/${postId}`} className="text-blue-500 hover:text-blue-700 hover:underline">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="w-6 h-6"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"
+              />
+            </svg>
+          </Link>
+
+          <IconButton color="red" size="sm" variant="text" onClick={handleOpen}>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+              className="h-5 w-5"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </IconButton>
+        </div>
       </DialogHeader>
       <DialogBody
         divider
         className="p-5 text-justify max-h-[30rem] overflow-scroll no-scrollbar"
       >
-        <CardHeader
-          floated={false}
-          color="transparent"
-          className="mx-0 mt-0 mb-4 rounded-lg h-[375px]"
-        >
-          <img
-            src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1471&q=80"
-            alt="ui/ux review check"
-          />
-        </CardHeader>
-        {content}
+        <div
+          dangerouslySetInnerHTML={{
+            __html: content,
+          }}
+        />
       </DialogBody>
       <DialogFooter className="text-left border-t-white">
         {AvatarIdentity}

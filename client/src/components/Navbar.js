@@ -19,8 +19,26 @@ import {
 } from "@heroicons/react/24/solid";
 import { NotificationsMenu } from "./NotificationsMenu";
 import { useNavigate, Link } from "react-router-dom";
-import Help from "./Help";
-const NavbarDark = ({ signInOrNot, handleSignInOrNot }) => {
+
+import axios from "axios";
+
+import { useUser } from "./shared/UserContext";
+
+const API_URL = process.env.API_URL;
+
+const NavbarDark = () => {
+  const { state } = useUser();
+  const signInOrNot = state.isAuthenticated;
+  const [query, setQuery] = useState(""); // State to store the search query
+  const navigate = useNavigate();
+  
+  const handleSearch = () => {
+    if (query.trim() !== "") {
+      // Navigate to the search results page with the search query as a parameter
+      navigate(`/post/search?q=${query}`);
+    }
+  };
+
   return (
     <Navbar
       variant="gradient"
@@ -49,26 +67,27 @@ const NavbarDark = ({ signInOrNot, handleSignInOrNot }) => {
             containerProps={{
               className: "min-w-[100px]",
             }}
+            value={query} // Bind the value of the input field to the query state
+            onChange={(e) => setQuery(e.target.value)}
           />
 
-          <Button
-            type="button"
-            onClick={() => {}}
-            size="sm"
-            color="white"
-            className="!absolute right-1 top-1 rounded"
-          >
-            <SearchIcon />
-          </Button>
+          <Link to={`/post/search?q=${query}`}>
+            <Button
+              type="button"
+              onClick={handleSearch}
+              size="sm"
+              color="white"
+              className="!absolute right-1 top-1 rounded"
+            >
+              <SearchIcon />
+            </Button>
+          </Link>
         </div>
 
         {signInOrNot ? (
           <div className="ml-auto flex gap-1 md:mr-4">
             <NotificationsMenu />
-            <ProfileMenu
-              signInOrNot={signInOrNot}
-              handleSignInOrNot={handleSignInOrNot}
-            />
+            <ProfileMenu />
           </div>
         ) : (
           <div className="ml-auto flex gap-1 md:mr-4">
@@ -121,7 +140,7 @@ const profileMenuItems = [
     icon: Cog6ToothIcon,
   },
   {
-    label: "Help",
+    label: "Reach Us",
     icon: LifebuoyIcon,
   },
   {
@@ -130,37 +149,48 @@ const profileMenuItems = [
   },
 ];
 
-function ProfileMenu({ signInOrNot, handleSignInOrNot }) {
+function ProfileMenu() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const defaultPic = "https://cdn-icons-png.flaticon.com/128/3177/3177440.png";
 
   const closeMenu = () => setIsMenuOpen(false);
 
-  const [openHelpDialog, setOpenHelpDialog] = useState(false);
-
-  const handleOpenHelpDialog = () => setOpenHelpDialog(!openHelpDialog);
-
+  const { state, dispatch } = useUser();
   const navigate = useNavigate();
+
   const handleMenuItemClick = (label) => {
     closeMenu();
 
     if (label === "My Profile") {
-      navigate("/profile");
+      navigate(`/profile/${state.user.userName}`);
     } else if (label === "Edit Profile") {
-      navigate("/edit-profile");
-    } else if (label === "Help") {
-      handleOpenHelpDialog();
-      <Help open={openHelpDialog} handleOpen={handleOpenHelpDialog} />;
+      navigate("/update-profile");
+    } else if (label === "Reach Us") {
+      navigate("/help");
     } else if (label === "Sign Out") {
-      // Perform sign-out logic
-      // Clear authentication state (replace with your actual logic)
-      // For example, if using a state management library like Redux:
-      // dispatch(logoutAction());
-      {
-        if (signInOrNot) {
-          handleSignInOrNot();
-        }
-      }
-      navigate("/signin");
+      // Send a sign-out request to the backend
+      axios
+        .post(`${API_URL}/user/sign-out`, {}, { withCredentials: true })
+        .then((response) => {
+          // Handle the sign-out response (e.g., clear cookies, etc.)
+          // Replace the code below with your actual sign-out logic
+          // Clear authentication state
+          if (response.status === 200) {
+            // Successful sign-out
+            // Clear authentication state
+            dispatch({ type: "LOGOUT" });
+            navigate("/signin");
+          } else {
+            alert("Error signing out.");
+            console.error(`Unhandled status code: ${response.status}`);
+          }
+        })
+        .catch((error) => {
+          alert("Error signing out.");
+          console.error("Error during sign-out:", error);
+          // Handle error as needed
+        });
     }
   };
 
@@ -178,7 +208,7 @@ function ProfileMenu({ signInOrNot, handleSignInOrNot }) {
             size="sm"
             alt="Catherine"
             className="border border-white p-0.5 object-cover"
-            src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=988&q=80"
+            src={state.user.profilePhoto ? state.user.profilePhoto : defaultPic}
           />
           <ChevronDownIcon
             strokeWidth={2.5}
