@@ -3,3 +3,5 @@ UniVox: Empowering college students with an online platform for open discussions
 
 Demonstration video : https://drive.google.com/file/d/16H2a1i1MH2VZGlUtW176jw-BNQCxhmEv/view?usp=sharing
 
+Live Demo : https://univox.netlify.app/
+
